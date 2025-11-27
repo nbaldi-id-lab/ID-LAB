@@ -1,69 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ID-LAB NYC</title>
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: black;
-        font-family: Helvetica, Arial, sans-serif;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        text-align: center;
-    }
-    .logo {
-        max-width: 260px;
-        margin-bottom: 40px;
-    }
-    .tagline {
-        font-size: 16px;
-        line-height: 1.5;
-        white-space: pre-line;
-        margin-bottom: 40px;
-        letter-spacing: 0.2px;
-    }
-    .links a {
-        color: white;
-        text-decoration: none;
-        font-size: 15px;
-        text-transform: uppercase;
-        border: 1px solid white;
-        padding: 10px 20px;
-        margin: 0 10px;
-        transition: 0.2s;
-    }
-    .links a:hover {
-        background: white;
-        color: black;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID-LAB NYC</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: black;
+            font-family: Helvetica, Arial, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .logo {
+            max-width: 280px;
+            width: 90%;
+            margin-bottom: 40px;
+        }
+        .tagline {
+            font-size: 14px;          /* smaller & cleaner */
+            line-height: 1.6;
+            max-width: 320px;
+            margin: 0 auto 30px;
+            letter-spacing: 0.3px;
+        }
+        .location {
+            font-size: 13px;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+        .contact-btn {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border: 1px solid white;
+            padding: 14px 32px;
+            transition: all 0.3s;
+        }
+        .contact-btn:hover {
+            background: white;
+            color: black;
+        }
+    </style>
 </head>
 <body>
 
-    <img class="logo" src="logo.jpeg" alt="ID-LAB Logo">
+    <img class="logo" src="Logo ID-LAB.jpg" alt="ID-LAB Logo">
 
     <div class="tagline">
-ID-LAB is an 
-architecture and 
-interior design 
-practice founded 
-by Niccolo Baldi, 
-dedicated to 
-identity-driven 
-design.
+        ID-LAB is an architecture and interior design practice founded by Niccolo Baldi, dedicated to identity-driven design.
     </div>
 
-    <div class="links">
-        <a href="mailto:info@id-lab.nyc">Contact Us</a>
-        <a href="#">Request Portfolio</a>
-    </div>
+    <div class="location">Brooklyn, NY</div>
+
+    <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
 
 </body>
 </html>
