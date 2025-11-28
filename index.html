@@ -26,10 +26,11 @@
     }
 
     .logo {
-        width: 100%;                 /* ← this is the key line */
-        height: auto;
-        margin-bottom: 40px;
-    }
+    width: 100%;                    /* take full width of the wrapper */
+    max-width: 240px;               /* ← this is the magic number you control */
+    height: auto;
+    margin: 0 auto 40px auto;       /* centers it and adds space below */
+    display: block;}
 
     .description {
         font-size: 12px;             /* ← your new preferred size */
