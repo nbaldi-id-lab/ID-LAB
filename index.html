@@ -5,30 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ID-LAB NYC</title>
 <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#000; overflow:hidden; font-family:Helvetica,Arial,sans-serif; }
-    .slide {
-        position:fixed; top:0; left:0; width:100vw; height:100vh;
-        opacity:0; transition:opacity 1.8s ease-in-out;
-    }
-    .slide img {
-        width:100%; height:100%; object-fit:cover;
-    }
-    .slide.active { opacity:1; z-index:1; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#000;overflow:hidden;font-family:Helvetica,Arial,sans-serif;position:relative;}
 
-    .caption-bar {
-        position:fixed; bottom:0; left:0; width:100%; background:rgba(0,0,0,0.9);
-        padding:9px 0; text-align:center; z-index:10;
+    /* ——— BACKGROUND SLIDESHOW ——— */
+    .slide{
+        position:fixed;top:0;left:0;width:100vw;height:100vh;
+        opacity:0;transition:opacity 1.8s ease-in-out;z-index:1;
     }
-    .caption {
-        color:#fff; font-size:8px; letter-spacing:1.2px; text-transform:uppercase;
-        white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    .slide img{width:100%;height:100%;object-fit:cover;}
+    .slide.active{opacity:1;}
+
+    /* ——— FOREGROUND CONTENT (always on top) ——— */
+    .overlay{
+        position:fixed;top:0;left:0;width:100%;height:100%;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        z-index:10;pointer-events:none;
     }
+    .overlay > * {pointer-events:auto;}
+    .logo{width:200px;height:auto;margin-bottom:60px;}
+    .description{max-width:380px;color:white;font-size:12px;line-height:1.75;text-align:center;margin-bottom:20px;}
+    .location{font-size:13px;color:white;margin:30px 0 50px;opacity:0.9;}
+    .contact-btn{
+        display:inline-block;color:white;text-decoration:none;text-transform:uppercase;
+        font-size:14px;font-weight:bold;letter-spacing:1.5px;border:1px solid white;
+        padding:14px 36px;transition:all .3s;
+    }
+    .contact-btn:hover{background:white;color:black;}
+
+    /* ——— 8px CAPTION BAR ——— */
+    .caption-bar{
+        position:fixed;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.9);
+        padding:9px 0;text-align:center;z-index:20;
+    }
+    .caption{color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;}
 </style>
 </head>
 <body>
 
-<!-- Put ALL your images here (01.jpg → 22.jpg + any -B, -C, -D versions) -->
+<!-- BACKGROUND SLIDESHOW – path fixed for uppercase "Images" folder -->
 <div class="slide active"><img src="Images/01.jpg"></div>
 <div class="slide"><img src="Images/02.jpg"></div>
 <div class="slide"><img src="Images/03.jpg"></div>
@@ -48,18 +63,30 @@
 <div class="slide"><img src="Images/17.jpg"></div>
 <div class="slide"><img src="Images/18.jpg"></div>
 <div class="slide"><img src="Images/19.jpg"></div>
-<div class="slide"><img src="Images/19-B.jpg"></div>   <!-- same caption as 19.jpg -->
+<div class="slide"><img src="Images/19-B.jpg"></div>
 <div class="slide"><img src="Images/20.jpg"></div>
 <div class="slide"><img src="Images/21.jpg"></div>
 <div class="slide"><img src="Images/22.jpg"></div>
-<!-- add more -B/-C if you want -->
+<!-- add more -B/-C files the same way -->
 
+<!-- FOREGROUND CONTENT -->
+<div class="overlay">
+    <img class="logo" src="logo.png" alt="ID-LAB NYC">
+    <div class="description">
+        ID-LAB is an architecture and interior design practice founded by Niccolo Baldi,
+        dedicated to identity-driven design.
+    </div>
+    <div class="location">Brooklyn, NY</div>
+    <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
+</div>
+
+<!-- 8px CAPTION BAR -->
 <div class="caption-bar">
     <div class="caption" id="caption"></div>
 </div>
 
 <script>
-// Caption database – only the base filenames need an entry
+// Caption database (only base files needed)
 const captions = {
     "01.jpg": "OMA · Louis Vuitton Visionary Journeys – Origins · Osaka · 2025",
     "02.jpg": "OMA · Louis Vuitton Visionary Journeys – Monogram · Osaka · 2025",
@@ -89,30 +116,20 @@ const slides = Array.from(document.querySelectorAll('.slide'));
 const captionEl = document.getElementById('caption');
 
 // Fisher-Yates shuffle
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 let shuffled = shuffle([...slides]);
-let index = 0;
+let i = 0;
 
-function showNext() {
-    slides.forEach(s => s.classList.remove('active'));
-    shuffled[index].classList.add('active');
-
-    const filename = shuffled[index].querySelector('img').src.split('/').pop();
-    const base = filename.replace(/-B\.jpg|-C\.jpg|-D\.jpg/gi, '.jpg');
+function next(){
+    slides.forEach(s=>s.classList.remove('active'));
+    shuffled[i].classList.add('active');
+    const file = shuffled[i].querySelector('img').src.split('/').pop();
+    const base = file.replace(/-B\.jpg|-C\.jpg/gi,'.jpg');
     captionEl.textContent = captions[base] || "";
-
-    index = (index + 1) % shuffled.length;
+    i = (i+1) % shuffled.length;
 }
-
-setInterval(showNext, 3000);
-showNext(); // first run
+setInterval(next,3000);
+next();
 </script>
 </body>
 </html>
