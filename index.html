@@ -8,7 +8,6 @@
     *{margin:0;padding:0;box-sizing:border-box;}
     body{background:#000;overflow:hidden;font-family:Helvetica,Arial,sans-serif;position:relative;}
 
-    /* ——— BACKGROUND SLIDESHOW ——— */
     .slide{
         position:fixed;top:0;left:0;width:100vw;height:100vh;
         opacity:0;transition:opacity 1.8s ease-in-out;z-index:1;
@@ -16,34 +15,28 @@
     .slide img{width:100%;height:100%;object-fit:cover;}
     .slide.active{opacity:1;}
 
-    /* ——— FOREGROUND CONTENT (always on top) ——— */
-    .overlay{
-        position:fixed;top:0;left:0;width:100%;height:100%;
-        display:flex;flex-direction:column;align-items:center;justify-content:center;
-        z-index:10;pointer-events:none;
+    .logo{
+        position:fixed;
+        width:180px;
+        height:auto;
+        z-index:40;
+        pointer-events:none;
+        user-select:none;
+        filter:drop-shadow(0 0 15px rgba(255,255,255,0.7));
     }
-    .overlay > * {pointer-events:auto;}
-    .logo{width:200px;height:auto;margin-bottom:60px;}
-    .description{max-width:380px;color:white;font-size:12px;line-height:1.75;text-align:center;margin-bottom:20px;}
-    .location{font-size:13px;color:white;margin:30px 0 50px;opacity:0.9;}
-    .contact-btn{
-        display:inline-block;color:white;text-decoration:none;text-transform:uppercase;
-        font-size:14px;font-weight:bold;letter-spacing:1.5px;border:1px solid white;
-        padding:14px 36px;transition:all .3s;
-    }
-    .contact-btn:hover{background:white;color:black;}
 
-    /* ——— 8px CAPTION BAR ——— */
     .caption-bar{
         position:fixed;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.9);
         padding:9px 0;text-align:center;z-index:20;
     }
-    .caption{color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;}
+    .caption{
+        color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;
+    }
 </style>
 </head>
 <body>
 
-<!-- BACKGROUND SLIDESHOW – path fixed for uppercase "Images" folder -->
+<!-- SLIDES -->
 <div class="slide active"><img src="Images/01.jpg"></div>
 <div class="slide"><img src="Images/02.jpg"></div>
 <div class="slide"><img src="Images/03.jpg"></div>
@@ -66,93 +59,17 @@
 <div class="slide"><img src="Images/20.jpg"></div>
 <div class="slide"><img src="Images/21.jpg"></div>
 <div class="slide"><img src="Images/22.jpg"></div>
-<!-- add more -B/-C files the same way -->
 
-<!-- FOREGROUND CONTENT -->
-
-<style>
-/* Bouncing DVD logo */
-.logo {
-    position: fixed;
-    width: 180px;
-    height: auto;
-    z-index: 40;
-    pointer-events: none;
-    user-select: none;
-    filter: drop-shadow(0 0 15px rgba(255,255,255,0.6));
-    transition: filter 0.4s;
-}
-</style>
-
-<!-- Keep your logo wherever it is in the HTML -->
+<!-- BOUNCING LOGO -->
 <img class="logo" src="logo.png" alt="ID-LAB NYC">
 
-<script>
-// DVD logo bouncer + synced slideshow
-const logo = document.querySelector('.logo');
-const slides = Array.from(document.querySelectorAll('.slide'));
-const captionEl = document.getElementById('caption');
-
-const captions = { /* your existing captions object – keep it unchanged */ };
-
-let x = Math.random() * (window.innerWidth - 180);
-let y = Math.random() * (window.innerHeight - 180);
-let dx = (Math.random() > 0.5 ? 2 : -2);
-let dy = (Math.random() > 0.5 ? 2 : -2);
-let currentSlide = 0;
-
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-shuffle(slides);
-
-function showSlide(n) {
-    slides.forEach(s => s.classList.remove('active'));
-    slides[n].classList.add('active');
-    const file = slides[n].querySelector('img').src.split('/').pop();
-    const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
-    captionEl.textContent = captions[base] || "";
-}
-
-function bounce() {
-    x += dx;
-    y += dy;
-    let hitEdge = false;
-
-    if (x <= 0 || x >= window.innerWidth - 180) { dx = -dx; hitEdge = true; x = Math.max(0, Math.min(x, window.innerWidth - 180)); }
-    if (y <= 0 || y >= window.innerHeight - 180) { dy = -dy; hitEdge = true; y = Math.max(0, Math.min(y, window.innerHeight - 180)); }
-
-    logo.style.transform = `translate(${x}px, ${y}px)`;
-
-    // CHANGE SLIDE THE EXACT MOMENT LOGO HITS EDGE
-    if (hitEdge) {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }
-
-    requestAnimationFrame(bounce);
-}
-
-showSlide(0);
-bounce();
-
-// Responsive resize fix
-window.addEventListener('resize', () => {
-    x = Math.max(0, Math.min(x, window.innerWidth - 180));
-    y = Math.max(0, Math.min(y, window.innerHeight - 180));
-});
-</script>
-
-<!-- 8px CAPTION BAR -->
+<!-- CAPTION BAR -->
 <div class="caption-bar">
     <div class="caption" id="caption"></div>
 </div>
 
 <script>
-// Caption database (only base files needed)
+// captions
 const captions = {
     "01.jpg": "OMA · Louis Vuitton Visionary Journeys – Origins · Osaka · 2025",
     "02.jpg": "OMA · Louis Vuitton Visionary Journeys – Monogram · Osaka · 2025",
@@ -178,24 +95,54 @@ const captions = {
     "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials · Osaka · 2025"
 };
 
-const slides = Array.from(document.querySelectorAll('.slide'));
+const logo = document.querySelector('.logo');
+const slides = document.querySelectorAll('.slide');
 const captionEl = document.getElementById('caption');
 
-// Fisher-Yates shuffle
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-let shuffled = shuffle([...slides]);
-let i = 0;
+let x = Math.random() * (innerWidth - 180);
+let y = Math.random() * (innerHeight - 180);
+let dx = Math.random() > 0.5 ? 2.2 : -2.2;
+let dy = Math.random() > 0.5 ? 2.2 : -2.2;
+let current = 0;
 
-function next(){
-    slides.forEach(s=>s.classList.remove('active'));
-    shuffled[i].classList.add('active');
-    const file = shuffled[i].querySelector('img').src.split('/').pop();
-    const base = file.replace(/-B\.jpg|-C\.jpg/gi,'.jpg');
-    captionEl.textContent = captions[base] || "";
-    i = (i+1) % shuffled.length;
+// show first slide
+slides[0].classList.add('active');
+captionEl.textContent = captions["01.jpg"];
+
+function animate() {
+    x += dx;
+    y += dy;
+    let hit = false;
+
+    if (x <= 0 || x >= innerWidth - 180) { dx = -dx; hit = true; }
+    if (y <= 0 || y >= innerHeight - 180) { dy = -dy; hit = true; }
+
+    // clamp so it never gets stuck
+    x = Math.max(0, Math.min(x, innerWidth - 180));
+    y = Math.max(0, Math.min(y, innerHeight - 180));
+
+    logo.style.transform = `translate(${x}px, ${y}px)`;
+
+    if (hit) {
+        // next slide on hit
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+
+        const file = slides[current].querySelector('img').src.split('/').pop();
+        const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
+        captionEl.textContent = captions[base] || "";
+    }
+
+    requestAnimationFrame(animate);
 }
-setInterval(next,3000);
-next();
+
+animate();
+
+window.addEventListener('resize', () => {
+    x = Math.max(0, Math.min(x, innerWidth - 180));
+    y = Math.max(0, Math.min(y, innerHeight - 180));
+});
 </script>
 </body>
 </html>
