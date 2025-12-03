@@ -69,15 +69,34 @@
 <!-- add more -B/-C files the same way -->
 
 <!-- FOREGROUND CONTENT -->
-<div class="overlay">
-    <img class="logo" src="logo.png" alt="ID-LAB NYC">
-    <div class="description">
-        ID-LAB is an architecture and interior design practice<br>
-        dedicated to identity-driven design.
+
+<div class="top-bar">
+    <div class="top-text">
+        ID-LAB is an architecture and interior design practice based in NYC dedicated to identity-driven design.
     </div>
-    <div class="location">Brooklyn, NY</div>
-    <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
 </div>
+
+<style>
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.9);
+    padding: 9px 0;
+    text-align: center;
+    z-index: 20;
+}
+.top-text {
+    color: #fff;
+    font-size: 8px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+</style>
 
 <!-- 8px CAPTION BAR -->
 <div class="caption-bar">
