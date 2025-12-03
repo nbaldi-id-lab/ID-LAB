@@ -15,28 +15,38 @@
     .slide img{width:100%;height:100%;object-fit:cover;}
     .slide.active{opacity:1;}
 
-    .logo{
-        position:fixed;
-        width:60pxy;
-        height:auto;
-        z-index:40;
-        pointer-events:none;
-        user-select:none;
-        filter:drop-shadow(0 0 15px rgba(255,255,255,0.7));
+    .top-bar{
+        position:fixed;top:0;left:0;width:100%;background:rgba(0,0,0,0.9);
+        padding:9px 0;text-align:center;z-index:30;
     }
+    .top-text{
+        color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;line-height:1.4;
+    }
+
+    .logo{
+        position:fixed;width:60px;height:auto;z-index:40;
+        pointer-events:none;user-select:none;
+        filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));
+    }
+
+    .contact-btn{
+        position:fixed;bottom:60px;left:50%;transform:translateX(-50%);
+        z-index:40;color:white;text-decoration:none;text-transform:uppercase;
+        font-size:14px;font-weight:bold;letter-spacing:1.5px;
+        border:1px solid white;padding:14px 36px;transition:all .3s;
+    }
+    .contact-btn:hover{background:white;color:black;}
 
     .caption-bar{
         position:fixed;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.9);
         padding:9px 0;text-align:center;z-index:20;
     }
-    .caption{
-        color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;
-    }
+    .caption{color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;}
 </style>
 </head>
 <body>
 
-<!-- SLIDES -->
+<!-- Slides -->
 <div class="slide active"><img src="Images/01.jpg"></div>
 <div class="slide"><img src="Images/02.jpg"></div>
 <div class="slide"><img src="Images/03.jpg"></div>
@@ -60,16 +70,26 @@
 <div class="slide"><img src="Images/21.jpg"></div>
 <div class="slide"><img src="Images/22.jpg"></div>
 
-<!-- BOUNCING LOGO -->
+<!-- Top description -->
+<div class="top-bar">
+    <div class="top-text">
+        ID-LAB IS AN ARCHITECTURE AND INTERIOR DESIGN PRACTICE<br>
+        DEDICATED TO IDENTITY-DRIVEN DESIGN
+    </div>
+</div>
+
+<!-- Bouncing logo – now 60px -->
 <img class="logo" src="logo.png" alt="ID-LAB NYC">
 
-<!-- CAPTION BAR -->
+<!-- Contact button -->
+<a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
+
+<!-- Bottom caption -->
 <div class="caption-bar">
     <div class="caption" id="caption"></div>
 </div>
 
 <script>
-// captions
 const captions = {
     "01.jpg": "OMA · Louis Vuitton Visionary Journeys – Origins · Osaka · 2025",
     "02.jpg": "OMA · Louis Vuitton Visionary Journeys – Monogram · Osaka · 2025",
@@ -99,49 +119,43 @@ const logo = document.querySelector('.logo');
 const slides = document.querySelectorAll('.slide');
 const captionEl = document.getElementById('caption');
 
-let x = Math.random() * (innerWidth - 180);
-let y = Math.random() * (innerHeight - 180);
-let dx = Math.random() > 0.5 ? 2.2 : -2.2;
-let dy = Math.random() > 0.5 ? 2.2 : -2.2;
+let x = Math.random() * (innerWidth - 60);
+let y = Math.random() * (innerHeight - 60);
+let dx = Math.random() > 0.5 ? 2.3 : -2.3;
+let dy = Math.random() > 0.5 ? 2.3 : -2.3;
 let current = 0;
 
-// show first slide
 slides[0].classList.add('active');
 captionEl.textContent = captions["01.jpg"];
 
 function animate() {
-    x += dx;
-    y += dy;
+    x += dx; y += dy;
     let hit = false;
 
-    if (x <= 0 || x >= innerWidth - 180) { dx = -dx; hit = true; }
-    if (y <= 0 || y >= innerHeight - 180) { dy = -dy; hit = true; }
+    if (x <= 0 || x >= innerWidth - 60) { dx = -dx; hit = true; }
+    if (y <= 0 || y >= innerHeight - 60) { dy = -dy; hit = true; }
 
-    // clamp so it never gets stuck
-    x = Math.max(0, Math.min(x, innerWidth - 180));
-    y = Math.max(0, Math.min(y, innerHeight - 180));
+    x = Math.max(0, Math.min(x, innerWidth - 60));
+    y = Math.max(0, Math.min(y, innerHeight - 60));
 
     logo.style.transform = `translate(${x}px, ${y}px)`;
 
     if (hit) {
-        // next slide on hit
         slides[current].classList.remove('active');
         current = (current + 1) % slides.length;
         slides[current].classList.add('active');
-
         const file = slides[current].querySelector('img').src.split('/').pop();
         const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
         captionEl.textContent = captions[base] || "";
     }
-
     requestAnimationFrame(animate);
 }
 
 animate();
 
 window.addEventListener('resize', () => {
-    x = Math.max(0, Math.min(x, innerWidth - 180));
-    y = Math.max(0, Math.min(y, innerHeight - 180));
+    x = Math.max(0, Math.min(x, innerWidth - 60));
+    y = Math.max(0, Math.min(y, innerHeight - 60));
 });
 </script>
 </body>
