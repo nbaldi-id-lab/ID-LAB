@@ -16,15 +16,25 @@
     .slide.active{opacity:1;}
 
     .top-bar, .caption-bar{
-        position:fixed;left:0;width:100%;background:#000;z-index:30;
-        height:36px;display:flex;align-items:center;justify-content:center;
-    }
-    .top-bar{top:0;}
-    .caption-bar{bottom:0;}
+    position:fixed;left:0;width:100%;background:#000;z-index:30;
+    height:36px;display:flex;align-items:center;justify-content:center;
+    transition: all .3s;
+}
+.top-bar{top:0;}
+.caption-bar{bottom:0; align-items:flex-start; padding-top:9px; } /* ← bottom text aligned to top */
 
-    .top-text, .caption{
-        color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;line-height:1.4;
-    }
+.top-text, .caption{
+    color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;
+    text-align:center;transition: all .3s;
+}
+
+/* Inverted state when hit */
+.top-bar.hit, .caption-bar.hit{
+    background:#fff;
+}
+.top-bar.hit .top-text, .caption-bar.hit .caption{
+    color:#000;
+}
 
     .logo{
         position:fixed;width:60px;height:auto;z-index:40;
