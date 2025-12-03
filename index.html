@@ -70,33 +70,81 @@
 
 <!-- FOREGROUND CONTENT -->
 
-<div class="top-bar">
-    <div class="top-text">
-        ID-LAB is an architecture and interior design practice based in NYC dedicated to identity-driven design.
-    </div>
-</div>
-
 <style>
-.top-bar {
+/* Bouncing DVD logo */
+.logo {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.9);
-    padding: 9px 0;
-    text-align: center;
-    z-index: 20;
-}
-.top-text {
-    color: #fff;
-    font-size: 8px;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: 180px;
+    height: auto;
+    z-index: 40;
+    pointer-events: none;
+    user-select: none;
+    filter: drop-shadow(0 0 15px rgba(255,255,255,0.6));
+    transition: filter 0.4s;
 }
 </style>
+
+<!-- Keep your logo wherever it is in the HTML -->
+<img class="logo" src="logo.png" alt="ID-LAB NYC">
+
+<script>
+// DVD logo bouncer + synced slideshow
+const logo = document.querySelector('.logo');
+const slides = Array.from(document.querySelectorAll('.slide'));
+const captionEl = document.getElementById('caption');
+
+const captions = { /* your existing captions object – keep it unchanged */ };
+
+let x = Math.random() * (window.innerWidth - 180);
+let y = Math.random() * (window.innerHeight - 180);
+let dx = (Math.random() > 0.5 ? 2 : -2);
+let dy = (Math.random() > 0.5 ? 2 : -2);
+let currentSlide = 0;
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+shuffle(slides);
+
+function showSlide(n) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    const file = slides[n].querySelector('img').src.split('/').pop();
+    const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
+    captionEl.textContent = captions[base] || "";
+}
+
+function bounce() {
+    x += dx;
+    y += dy;
+    let hitEdge = false;
+
+    if (x <= 0 || x >= window.innerWidth - 180) { dx = -dx; hitEdge = true; x = Math.max(0, Math.min(x, window.innerWidth - 180)); }
+    if (y <= 0 || y >= window.innerHeight - 180) { dy = -dy; hitEdge = true; y = Math.max(0, Math.min(y, window.innerHeight - 180)); }
+
+    logo.style.transform = `translate(${x}px, ${y}px)`;
+
+    // CHANGE SLIDE THE EXACT MOMENT LOGO HITS EDGE
+    if (hitEdge) {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    requestAnimationFrame(bounce);
+}
+
+showSlide(0);
+bounce();
+
+// Responsive resize fix
+window.addEventListener('resize', () => {
+    x = Math.max(0, Math.min(x, window.innerWidth - 180));
+    y = Math.max(0, Math.min(y, window.innerHeight - 180));
+});
+</script>
 
 <!-- 8px CAPTION BAR -->
 <div class="caption-bar">
