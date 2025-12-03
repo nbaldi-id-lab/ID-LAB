@@ -8,73 +8,42 @@
     *{margin:0;padding:0;box-sizing:border-box;}
     body{background:#000;overflow:hidden;font-family:Helvetica,Arial,sans-serif;position:relative;}
 
-    .slide{
-        position:fixed;top:0;left:0;width:100vw;height:100vh;
-        opacity:0;transition:opacity 0.2s ease-in-out;z-index:1;
-    }
+    .slide{position:fixed;top:0;left:0;width:100vw;height:100vh;opacity:0;transition:opacity 0.2s ease-in-out;z-index:1;}
     .slide img{width:100%;height:100%;object-fit:cover;}
     .slide.active{opacity:1;}
 
-    .top-bar, .caption-bar{
-    position:fixed;left:0;width:100%;background:#000;z-index:30;
-    height:36px;display:flex;align-items:center;justify-content:center;
-    transition: all .3s;
-}
-.top-bar{top:0;}
-.caption-bar{bottom:0; align-items:flex-start; padding-top:9px; } /* ← bottom text aligned to top */
+    .top-bar,.caption-bar{position:fixed;left:0;width:100%;background:#000;z-index:30;height:36px;display:flex;align-items:center;justify-content:center;transition:all .3s;}
+    .top-bar{top:0;}
+    .caption-bar{bottom:0;align-items:flex-start;padding-top:8px;}
 
-.top-text, .caption{
-    color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;
-    text-align:center;transition: all .3s;
-}
+    .top-text,.caption{color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;text-align:center;line-height:1.4;transition:all .3s;}
+    .top-bar.hit,.caption-bar.hit{background:#fff;}
+    .top-bar.hit .top-text,.caption-bar.hit .caption{color:#000;}
 
-/* Inverted state when hit */
-.top-bar.hit, .caption-bar.hit{
-    background:#fff;
-}
-.top-bar.hit .top-text, .caption-bar.hit .caption{
-    color:#000;
-}
+    .logo{position:fixed;width:60px;height:auto;z-index:40;pointer-events:none;user-select:none;filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));}
 
-    .logo{
-        position:fixed;width:60px;height:auto;z-index:40;
-        pointer-events:none;user-select:none;
-        filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));
-    }
-
-    .contact-btn{
-        position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-        z-index:40;color:white;text-decoration:none;text-transform:uppercase;
-        font-size:8px;font-weight:bold;letter-spacing:1.4px;
-        border:1.5px solid white;padding:4px 4px;transition:all .25s;
-        background:transparent;
-    }
-    .contact-btn:hover, .contact-btn.hit{
-        background:white;color:black;
-    }
+    .contact-btn{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:40;color:white;text-decoration:none;text-transform:uppercase;font-size:10px;font-weight:bold;letter-spacing:1.4px;border:1px solid white;padding:5px 12px;transition:all .25s;background:transparent;}
+    .contact-btn:hover,.contact-btn.hit{background:white;color:black;}
 </style>
 </head>
 <body>
 
-<!-- Slides -->
 <div class="slide active"><img src="Images/01.jpg"></div>
 <div class="slide"><img src="Images/02.jpg"></div>
 <div class="slide"><img src="Images/03.jpg"></div>
 <div class="slide"><img src="Images/04.jpg"></div>
 <div class="slide"><img src="Images/05.jpg"></div>
 <div class="slide"><img src="Images/06.jpg"></div>
-<div class="slide"><img src="Images/06-B.jpg"></div>
+<div class="slide"><img src="Images/6-B.jpg"></div>
 <div class="slide"><img src="Images/07.jpg"></div>
 <div class="slide"><img src="Images/08.jpg"></div>
 <div class="slide"><img src="Images/09.jpg"></div>
 <div class="slide"><img src="Images/10.jpg"></div>
-<div class="slide"><img src="Images/10-Bjpg"></div>
 <div class="slide"><img src="Images/11.jpg"></div>
 <div class="slide"><img src="Images/12.jpg"></div>
 <div class="slide"><img src="Images/13.jpg"></div>
 <div class="slide"><img src="Images/14.jpg"></div>
 <div class="slide"><img src="Images/15.jpg"></div>
-<div class="slide"><img src="Images/15-B.jpg"></div>
 <div class="slide"><img src="Images/16.jpg"></div>
 <div class="slide"><img src="Images/17.jpg"></div>
 <div class="slide"><img src="Images/18.jpg"></div>
@@ -83,24 +52,13 @@
 <div class="slide"><img src="Images/21.jpg"></div>
 <div class="slide"><img src="Images/22.jpg"></div>
 
-<!-- Top description -->
-<div class="top-bar">
-    <div class="top-text">
-        ID-LAB IS AN ARCHITECTURE AND INTERIOR DESIGN PRACTICE<br>
-        BASED IN NYC DEDICATED TO IDENTITY-DRIVEN DESIGN
-    </div>
-</div>
+<div class="top-bar"><div class="top-text">ID-LAB IS AN ARCHITECTURE AND INTERIOR DESIGN PRACTICE<br>DEDICATED TO IDENTITY-DRIVEN DESIGN</div></div>
 
-<!-- Bouncing logo -->
 <img class="logo" src="logo.png" alt="ID-LAB NYC">
 
-<!-- Contact button -->
 <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
 
-<!-- Bottom caption -->
-<div class="caption-bar">
-    <div class="caption" id="caption"></div>
-</div>
+<div class="caption-bar"><div class="caption" id="caption"></div></div>
 
 <script>
 const captions = {
@@ -120,19 +78,21 @@ const captions = {
     "13.jpg": "AR Architecture · Dear Irving on Hudson<br>interior design by Delphine Mauroit · New York · 2018",
     "14.jpg": "AR Architecture · Dear Irving on Hudson<br>interior design by Delphine Mauroit · New York · 2018",
     "15.jpg": "Anastasio Architects · Giada Flagship, concept by Claudio Silvestrin<br>Boston · 2019",
-    "16.jpg": "Anastasio Architects · Giada Flagship, concept by Claudio Silvestrin<br>Boston · 2019"
+    "16.jpg": "Anastasio Architects · Giada Flagship, concept by Claudio Silvestrin<br>Boston · 2019",
     "17.jpg": "Anastasio Architects · Golden Goose Flagship<br>Chicago · 2019",
     "18.jpg": "Anastasio Architects · Golden Goose Flagship<br>Scottsdale · 2020",
     "19.jpg": "OMA · Louis Vuitton Visionary Journeys – Trunkscape<br>Osaka · 2025",
-    "20.jpg": "OMA · Louis Vuitton Visionary Journeys – LV & Japan<br>Osaka · 2025",
+    "20.jpg": "OMA · Louis Vuitton Visionary Journeys – LV& Japan<br>Osaka · 2025",
     "21.jpg": "OMA · Louis Vuitton Visionary Journeys – Atelier<br>Osaka · 2025",
-    "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials<br>Osaka · 2025",
+    "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials<br>Osaka · 2025"
 };
-   
+
 const logo = document.querySelector('.logo');
 const slides = document.querySelectorAll('.slide');
 const captionEl = document.getElementById('caption');
 const btn = document.querySelector('.contact-btn');
+const topBar = document.querySelector('.top-bar');
+const bottomBar = document.querySelector('.caption-bar');
 
 const logoSize = 60;
 const topBarH = 36;
@@ -146,7 +106,7 @@ let dy = (Math.random() > 0.5 ? 1.6 : -1.6);
 let shuffled = [...slides];
 for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    [shuffled[i], shuffled[j] = shuffled[j], shuffled[i]];
 }
 let current = 0;
 
@@ -157,14 +117,13 @@ function animate() {
     x += dx; y += dy;
     let edgeHit = false;
 
-    if (y <= topBarH) { y = topBarH; dy = -dy; edgeHit = true; }
-    if (y >= innerHeight - bottomBarH - logoSize) { y = innerHeight - bottomBarH - logoSize; dy = -dy; edgeHit = true; }
+    if (y <= topBarH) { y = topBarH; dy = -dy; edgeHit = true; topBar.classList.add('hit'); setTimeout(() => topBar.classList.remove('hit'), 300); }
+    if (y >= innerHeight - bottomBarH - logoSize) { y = innerHeight - bottomBarH - logoSize; dy = -dy; edgeHit = true; bottomBar.classList.add('hit'); setTimeout(() => bottomBar.classList.remove('hit'), 300); }
     if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; edgeHit = true; }
 
     const r = btn.getBoundingClientRect();
     const logoRight = x + logoSize;
     const logoBottom = y + logoSize;
-
     if (logoRight > r.left && x < r.right && logoBottom > r.top && y < r.bottom) {
         btn.classList.add('hit');
         setTimeout(() => btn.classList.remove('hit'), 300);
@@ -175,7 +134,7 @@ function animate() {
         current = (current + 1) % shuffled.length;
         shuffled[current].classList.add('active');
         const file = shuffled[current].querySelector('img').src.split('/').pop();
-        const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
+        const base = file.replace(/-B\.jpg/gi, '.jpg');
         captionEl.innerHTML = captions[base] || "";
     }
 
@@ -187,7 +146,7 @@ animate();
 
 window.addEventListener('resize', () => {
     x = Math.max(0, Math.min(x, innerWidth - logoSize));
-    y = Math.max(topBarH, Math.min(y, innerHeight - bottomBarH - logoSize));
+    y = Math.max(topBarH, Math.min(y, innerHeight - topBarH - bottomBarH - logoSize));
 });
 </script>
 </body>
