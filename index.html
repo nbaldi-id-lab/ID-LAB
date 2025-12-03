@@ -36,13 +36,13 @@
 .contact-btn{
     position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
     z-index:40;color:white;text-decoration:none;text-transform:uppercase;
-    font-size:12px;font-weight:bold;letter-spacing:1.3px;
-    border:1px solid white;padding:9px 22px;transition:all .25s;
+    font-size:11px;font-weight:bold;letter-spacing:1.3px;
+    border:1px solid white;padding:6px 16px;transition:all .25s;
     background:transparent;
 }
 .contact-btn:hover, .contact-btn.hit{
     background:white;color:black;
-    }
+}
 </style>
 </head>
 <body>
@@ -127,7 +127,7 @@ const bottomBarH = 36;
 
 let x = Math.random() * (innerWidth - logoSize);
 let y = topBarH + Math.random() * (innerHeight - topBarH - bottomBarH - logoSize);
-let dx = (Math.random() > 0.5 ? 1.6 : -1.6);  // 70% speed
+let dx = (Math.random() > 0.5 ? 1.6 : -1.6);
 let dy = (Math.random() > 0.5 ? 1.6 : -1.6);
 
 let shuffled = [...slides];
@@ -135,7 +135,7 @@ for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 }
-let current = -1; // will become 0 on first hit
+let current = -1;
 
 function nextSlide() {
     if (current >= 0) shuffled[current].classList.remove('active');
@@ -145,44 +145,38 @@ function nextSlide() {
     const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
     captionEl.textContent = captions[base] || "";
 }
-
-// start with first image
-nextSlide();
+nextSlide(); // first image
 
 function animate() {
     x += dx; y += dy;
-    let hit = false;
+    let wallHit = false;
 
     // Top bar
-    if (y <= topBarH) { y = topBarH; dy = -dy; hit = true; }
+    if (y <= topBarH) { y = topBarH; dy = -dy; wallHit = true; }
     // Bottom bar
-    if (y >= innerHeight - bottomBarH - logoSize) { y = innerHeight - bottomBarH - logoSize; dy = -dy; hit = true; }
-    // Left & right walls
-    if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; hit = true; }
+    if (y >= innerHeight - bottomBarH - logoSize) { y = innerHeight - bottomBarH - logoSize; dy = -dy; wallHit = true; }
+    // Left / right walls
+    if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; wallHit = true; }
 
-    // Contact button collision (perfect collision + visual hit)
-    const btnRect = btn.getBoundingClientRect();
-    if (
-        x < btnRect.right - 10 && 
-        x + logoSize > btnRect.left + 10 &&
-        y < btnRect.bottom - 10 &&
-        y + logoSize > btnRect.top + 10
-    ) {
-        // push logo out of button and reverse correct direction
-        if (Math.abs(dx) > Math.abs(dy)) {
-            dx = x < btnRect.left + btnRect.width/2 ? -Math.abs(dx) : Math.abs(dx);
-        } else {
-            dy = y < btnRect.top + btnRect.height/2 ? -Math.abs(dy) : Math.abs(dy);
-        }
+    // Contact button collision — uses real border rectangle, no image change
+    const r = btn.getBoundingClientRect();
+    const hitLeft   = x + logoSize > r.left && x < r.left && y + logoSize > r.top && y < r.bottom;
+    const hitRight  = x < r.right && x + logoSize > r.right && y + logoSize > r.top && y < r.bottom;
+    const hitTop    = y + logoSize > r.top && y < r.top && x + logoSize > r.left && x < r.right;
+    const hitBottom = y < r.bottom && y + logoSize > r.bottom && x + logoSize > r.left && x < r.right;
+
+    if (hitLeft || hitRight || hitTop || hitBottom) {
+        if (hitLeft || hitRight) dx = -dx;
+        if (hitTop || hitBottom) dy = -dy;
         btn.classList.add('hit');
         setTimeout(() => btn.classList.remove('hit'), 300);
-        hit = true;
+        // no nextSlide() here → only visual invert
     }
 
+    // Only change image on wall / bar hits
+    if (wallHit) nextSlide();
+
     logo.style.transform = `translate(${x}px, ${y}px)`;
-
-    if (hit) nextSlide();
-
     requestAnimationFrame(animate);
 }
 
