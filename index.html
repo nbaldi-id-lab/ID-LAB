@@ -8,12 +8,21 @@
     *{margin:0;padding:0;box-sizing:border-box;}
     body{background:#000;overflow:hidden;font-family:Helvetica,Arial,sans-serif;position:relative;}
 
-    .slide{position:fixed;top:0;left:0;width:100vw;height:100vh;opacity:0;transition:opacity 0.2s ease-in-out;z-index:1;}
-    .slide img{width:100%;height:100%;object-fit:cover;}
+    .slide{
+        position:fixed;
+        top:0;left:0;width:100vw;height:100vh;
+        opacity:0;
+        transition:opacity 0.2s ease-in-out;
+        z-index:1;
+        border:1.5px solid white;
+        box-sizing:border-box;
+    }
+    .slide img{width:100%;height:100%;object-fit:cover;display:block;}
     .slide.active{opacity:1;}
 
-    .header-row, .footer-row{
-        position:fixed;left:0;width:100%;height:5vh;min-height:36px;
+    .header-row,.footer-row{
+        position:fixed;left:0;width:100%;
+        height:5vh;min-height:36px;
         display:flex;z-index:30;pointer-events:none;
     }
     .header-row{top:0;}
@@ -23,11 +32,8 @@
         border:1.5px solid white;background:#000;color:#fff;
         transition:all .3s;pointer-events:auto;padding:5px;
     }
-    .center-box{
-        flex:0 0 auto;display:flex;align-items:center;justify-content:center;
-        text-align:center;height:100%;
-    }
-    .footer-row .center-box{align-items:flex-start;padding-top:5px;}
+    .center-box{flex:0 0 auto;display:flex;align-items:center;justify-content:center;text-align:center;height:100%;}
+    .footer-row .center-box{align-items:flex-start;padding-top:8px;}
     .side-box{flex:1;height:100%;border-left:none;border-right:none;}
     .side-box.left{border-left:1.5px solid white !important;}
     .side-box.right{border-right:1.5px solid white !important;}
@@ -40,7 +46,8 @@
     .box.hit{background:#fff !important;color:#000 !important;}
 
     .logo{
-        position:fixed;width:clamp(50px,8vw,120px);height:auto;z-index:40;
+        position:fixed;
+        width:clamp(50px,8vw,120px);height:auto;z-index:40;
         pointer-events:none;user-select:none;
         filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));
     }
@@ -58,29 +65,29 @@
 <body>
 
 <!-- Slides -->
-<div class="slide active"><img src="Images/01.jpg"></div>
-<div class="slide"><img src="Images/02.jpg"></div>
-<div class="slide"><img src="Images/03.jpg"></div>
-<div class="slide"><img src="Images/04.jpg"></div>
-<div class="slide"><img src="Images/05.jpg"></div>
-<div class="slide"><img src="Images/06.jpg"></div>
-<div class="slide"><img src="Images/06-B.jpg"></div>
-<div class="slide"><img src="Images/07.jpg"></div>
-<div class="slide"><img src="Images/08.jpg"></div>
-<div class="slide"><img src="Images/09.jpg"></div>
-<div class="slide"><img src="Images/10.jpg"></div>
-<div class="slide"><img src="Images/11.jpg"></div>
-<div class="slide"><img src="Images/12.jpg"></div>
-<div class="slide"><img src="Images/13.jpg"></div>
-<div class="slide"><img src="Images/14.jpg"></div>
-<div class="slide"><img src="Images/15.jpg"></div>
-<div class="slide"><img src="Images/16.jpg"></div>
-<div class="slide"><img src="Images/17.jpg"></div>
-<div class="slide"><img src="Images/18.jpg"></div>
-<div class="slide"><img src="Images/19.jpg"></div>
-<div class="slide"><img src="Images/20.jpg"></div>
-<div class="slide"><img src="Images/21.jpg"></div>
-<div class="slide"><img src="Images/22.jpg"></div>
+<div class="slide active"><img src="Images/01.jpg" alt=""></div>
+<div class="slide"><img src="Images/02.jpg" alt=""></div>
+<div class="slide"><img src="Images/03.jpg" alt=""></div>
+<div class="slide"><img src="Images/04.jpg" alt=""></div>
+<div class="slide"><img src="Images/05.jpg" alt=""></div>
+<div class="slide"><img src="Images/06.jpg" alt=""></div>
+<div class="slide"><img src="Images/6-B.jpg" alt=""></div>
+<div class="slide"><img src="Images/07.jpg" alt=""></div>
+<div class="slide"><img src="Images/08.jpg" alt=""></div>
+<div class="slide"><img src="Images/09.jpg" alt=""></div>
+<div class="slide"><img src="Images/10.jpg" alt=""></div>
+<div class="slide"><img src="Images/11.jpg" alt=""></div>
+<div class="slide"><img src="Images/12.jpg" alt=""></div>
+<div class="slide"><img src="Images/13.jpg" alt=""></div>
+<div class="slide"><img src="Images/14.jpg" alt=""></div>
+<div class="slide"><img src="Images/15.jpg" alt=""></div>
+<div class="slide"><img src="Images/16.jpg" alt=""></div>
+<div class="slide"><img src="Images/17.jpg" alt=""></div>
+<div class="slide"><img src="Images/18.jpg" alt=""></div>
+<div class="slide"><img src="Images/19.jpg" alt=""></div>
+<div class="slide"><img src="Images/20.jpg" alt=""></div>
+<div class="slide"><img src="Images/21.jpg" alt=""></div>
+<div class="slide"><img src="Images/22.jpg" alt=""></div>
 
 <!-- TOP ROW -->
 <div class="header-row">
@@ -97,7 +104,7 @@
 <!-- LOGO -->
 <img class="logo" src="logo.png" alt="ID-LAB NYC">
 
-<!-- CONTACT BUTTON -->
+<!-- CONTACT -->
 <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
 
 <!-- BOTTOM ROW -->
@@ -117,7 +124,7 @@ const captions = {
     "04.jpg": "OMA · Louis Vuitton Visionary Journeys – Giveaway<br>Bangkok · 2024",
     "05.jpg": "OMA · Louis Vuitton Visionary Journeys – Sport<br>Shanghai · 2025",
     "06.jpg": "OMA · Louis Vuitton Visionary Journeys – Fashion Icons<br>Shanghai · 2025",
-    "06-B.jpg": "OMA · Louis Vuitton Visionary Journeys – Fashion Icons<br>Shanghai · 2025",
+    "6-B.jpg": "OMA · Louis Vuitton Visionary Journeys – LV & Japan<br>Osaka · 2025",
     "07.jpg": "OMA · Louis Vuitton Temaki Restaurant<br>Paris · ongoing",
     "08.jpg": "Anastasio Architects & Stefano Pasqualetti Design<br>The Boston Consulting Group (BCG) · Miami · 2020",
     "09.jpg": "Anastasio Architects & Stefano Pasqualetti Design<br>The Boston Consulting Group (BCG) · Miami · 2020",
@@ -131,7 +138,7 @@ const captions = {
     "17.jpg": "Anastasio Architects · Golden Goose Flagship<br>Chicago · 2019",
     "18.jpg": "Anastasio Architects · Golden Goose Flagship<br>Scottsdale · 2020",
     "19.jpg": "OMA · Louis Vuitton Visionary Journeys – Trunkscape<br>Osaka · 2025",
-    "20.jpg": "OMA · Louis Vuitton Visionary Journeys – LV & Japan<br>Osaka · 2025",
+    "20.jpg": "OMA · Louis Vuitton Visionary Journeys – LV& Japan<br>Osaka · 2025",
     "21.jpg": "OMA · Louis Vuitton Visionary Journeys – Atelier<br>Osaka · 2025",
     "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials<br>Osaka · 2025"
 };
@@ -142,13 +149,13 @@ const captionEl = document.getElementById('caption');
 const btn = document.querySelector('.contact-btn');
 const boxes = document.querySelectorAll('.box');
 
-const logoSize = Math.max(50, Math.min(120, innerWidth * 0.08));
-const topBarH = innerHeight * 0.05;
-const bottomBarH = innerHeight * 0.05;
+let logoSize = Math.max(50, Math.min(120, innerWidth * 0.08));
+let topH = innerHeight * 0.05;
+let bottomH = innerHeight * 0.05;
 const baseSpeed = innerWidth * 0.0018;
 
 let x = Math.random() * (innerWidth - logoSize);
-let y = topBarH + Math.random() * (innerHeight - topBarH - bottomBarH - logoSize);
+let y = topH + Math.random() * (innerHeight - topH - bottomH - logoSize);
 let dx = (Math.random() > 0.5 ? baseSpeed : -baseSpeed);
 let dy = (Math.random() > 0.5 ? baseSpeed : -baseSpeed);
 
@@ -163,11 +170,13 @@ shuffled[0].classList.add('active');
 captionEl.innerHTML = captions["01.jpg"] || "";
 
 function animate() {
-    x += dx; y += dy;
+    x += dx;
+    y += dy;
+
     let edgeHit = false;
 
-    if (y <= topBarH) { y = topBarH; dy = -dy; edgeHit = true; }
-    if (y >= innerHeight - bottomBarH - logoSize) { y = innerHeight - bottomBarH - logoSize; dy = -dy; edgeHit = true; }
+    if (y <= topH) { y = topH; dy = -dy; edgeHit = true; }
+    if (y >= innerHeight - bottomH - logoSize) { y = innerHeight - bottomH - logoSize; dy = -dy; edgeHit = true; }
     if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; edgeHit = true; }
 
     const logoRight = x + logoSize;
@@ -203,9 +212,11 @@ function animate() {
 animate();
 
 window.addEventListener('resize', () => {
-    const newSize = Math.max(50, Math.min(120, innerWidth * 0.08));
-    x = Math.max(0, Math.min(x, innerWidth - newSize));
-    y = Math.max(topBarH, Math.min(y, innerHeight - bottomBarH - newSize));
+    logoSize = Math.max(50, Math.min(120, innerWidth * 0.08));
+    topH = innerHeight * 0.05;
+    bottomH = innerHeight * 0.05;
+    x = Math.max(0, Math.min(x, innerWidth - logoSize));
+    y = Math.max(topH, Math.min(y, innerHeight - topH - bottomH - logoSize));
 });
 </script>
 </body>
