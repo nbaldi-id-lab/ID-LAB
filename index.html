@@ -10,17 +10,21 @@
 
     .slide{
         position:fixed;top:0;left:0;width:100vw;height:100vh;
-        opacity:0;transition:opacity 1.8s ease-in-out;z-index:1;
+        opacity:0;transition:opacity 0.2s ease-in-out;z-index:1; /* ← almost instant */
     }
     .slide img{width:100%;height:100%;object-fit:cover;}
     .slide.active{opacity:1;}
 
-    .top-bar{
-        position:fixed;top:0;left:0;width:100%;background:rgba(0,0,0,0.9);
-        padding:9px 0;text-align:center;z-index:30;
+    /* Top & bottom bars — same height, solid black, no transparency flicker */
+    .top-bar, .caption-bar{
+        position:fixed;left:0;width:100%;background:#000;z-index:30;
+        padding:11px 0;text-align:center;line-height:1.4;
     }
-    .top-text{
-        color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;line-height:1.4;
+    .top-bar{top:0;}
+    .caption-bar{bottom:0;}
+
+    .top-text, .caption{
+        color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;
     }
 
     .logo{
@@ -30,18 +34,15 @@
     }
 
     .contact-btn{
-        position:fixed;bottom:60px;left:50%;transform:translateX(-50%);
+        position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
         z-index:40;color:white;text-decoration:none;text-transform:uppercase;
         font-size:14px;font-weight:bold;letter-spacing:1.5px;
         border:1px solid white;padding:14px 36px;transition:all .3s;
+        background:transparent;
     }
-    .contact-btn:hover{background:white;color:black;}
-
-    .caption-bar{
-        position:fixed;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.9);
-        padding:9px 0;text-align:center;z-index:20;
+    .contact-btn:hover, .contact-btn.hit{
+        background:white;color:black;
     }
-    .caption{color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;}
 </style>
 </head>
 <body>
@@ -118,44 +119,70 @@ const captions = {
 const logo = document.querySelector('.logo');
 const slides = document.querySelectorAll('.slide');
 const captionEl = document.getElementById('caption');
+const contactBtn = document.querySelector('.contact-btn');
 
-let x = Math.random() * (innerWidth - 60);
-let y = Math.random() * (innerHeight - 60);
-let dx = Math.random() > 0.5 ? 2.3 : -2.3;
-let dy = Math.random() > 0.5 ? 2.3 : -2.3;
+const logoW = 60, logoH = 60;
+const topBarH = 38;     // height of top bar
+const bottomBarH = 38;  // height of bottom bar
+const btnW = contactBtn.offsetWidth;
+const btnH = contactBtn.offsetHeight;
+
+let x = Math.random() * (innerWidth - logoW);
+let y = Math.random() * (innerHeight - logoH);
+let dx = (Math.random() > 0.5 ? 1.6 : -1.6);  // ← 70% of original speed
+let dy = (Math.random() > 0.5 ? 1.6 : -1.6);
+let shuffled = [...slides];
+for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+}
 let current = 0;
 
-slides[0].classList.add('active');
-captionEl.textContent = captions["01.jpg"];
+// start
+shuffled[0].classList.add('active');
+captionEl.textContent = captions["01.jpg"] || "";
 
 function animate() {
     x += dx; y += dy;
     let hit = false;
 
-    if (x <= 0 || x >= innerWidth - 60) { dx = -dx; hit = true; }
-    if (y <= 0 || y >= innerHeight - 60) { dy = -dy; hit = true; }
+    // Bounce off top bar
+    if (y <= topBarH) { y = topBarH; dy = -dy; hit = true; }
+    // Bounce off bottom bar
+    if (y >= innerHeight - bottomBarH - logoH) { y = innerHeight - bottomBarH - logoH; dy = -dy; hit = true; }
+    // Bounce off screen edges
+    if (x <= 0 || x >= innerWidth - logoW) { dx = -dx; hit = true; }
 
-    x = Math.max(0, Math.min(x, innerWidth - 60));
-    y = Math.max(0, Math.min(y, innerHeight - 60));
+    // Bounce off Contact button (dead center)
+    const btnX = innerWidth/2 - btnW/2;
+    const btnY = innerHeight/2 - btnH/2;
+    if (x < btnX + btnW && x + logoW > btnX && y < btnY + btnH && y + logoH > btnY) {
+        if (Math.abs(dx) > Math.abs(dy)) dx = -dx;
+        else dy = -dy;
+        contactBtn.classList.add('hit');
+        setTimeout(() => contactBtn.classList.remove('hit'), 300);
+        hit = true;
+    }
 
     logo.style.transform = `translate(${x}px, ${y}px)`;
 
     if (hit) {
-        slides[current].classList.remove('active');
-        current = (current + 1) % slides.length;
-        slides[current].classList.add('active');
-        const file = slides[current].querySelector('img').src.split('/').pop();
+        shuffled[current].classList.remove('active');
+        current = (current + 1) % shuffled.length;
+        shuffled[current].classList.add('active');
+        const file = shuffled[current].querySelector('img').src.split('/').pop();
         const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
         captionEl.textContent = captions[base] || "";
     }
+
     requestAnimationFrame(animate);
 }
 
 animate();
 
 window.addEventListener('resize', () => {
-    x = Math.max(0, Math.min(x, innerWidth - 60));
-    y = Math.max(0, Math.min(y, innerHeight - 60));
+    x = Math.max(0, Math.min(x, innerWidth - logoW));
+    y = Math.max(topBarH, Math.min(y, innerHeight - bottomBarH - logoH));
 });
 </script>
 </body>
