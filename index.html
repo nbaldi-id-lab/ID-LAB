@@ -16,12 +16,12 @@
     .slide.active{opacity:1;}
 
     /* Top & bottom bars — same height, solid black, no transparency flicker */
-    .top-bar, .caption-bar{
-        position:fixed;left:0;width:100%;background:#000;z-index:30;
-        padding:11px 0;text-align:center;line-height:1.4;
-    }
-    .top-bar{top:0;}
-    .caption-bar{bottom:0;}
+   .top-bar, .caption-bar{
+    position:fixed;left:0;width:100%;background:#000;z-index:30;
+    height:36px;display:flex;align-items:center;justify-content:center;
+}
+.top-bar{top:0;}
+.caption-bar{bottom:0;}
 
     .top-text, .caption{
         color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;
@@ -33,15 +33,15 @@
         filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));
     }
 
-    .contact-btn{
-        position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-        z-index:40;color:white;text-decoration:none;text-transform:uppercase;
-        font-size:14px;font-weight:bold;letter-spacing:1.5px;
-        border:1px solid white;padding:14px 36px;transition:all .3s;
-        background:transparent;
-    }
-    .contact-btn:hover, .contact-btn.hit{
-        background:white;color:black;
+.contact-btn{
+    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    z-index:40;color:white;text-decoration:none;text-transform:uppercase;
+    font-size:12px;font-weight:bold;letter-spacing:1.3px;
+    border:1px solid white;padding:9px 22px;transition:all .25s;
+    background:transparent;
+}
+.contact-btn:hover, .contact-btn.hit{
+    background:white;color:black;
     }
 </style>
 </head>
@@ -119,61 +119,69 @@ const captions = {
 const logo = document.querySelector('.logo');
 const slides = document.querySelectorAll('.slide');
 const captionEl = document.getElementById('caption');
-const contactBtn = document.querySelector('.contact-btn');
+const btn = document.querySelector('.contact-btn');
 
-const logoW = 60, logoH = 60;
-const topBarH = 38;     // height of top bar
-const bottomBarH = 38;  // height of bottom bar
-const btnW = contactBtn.offsetWidth;
-const btnH = contactBtn.offsetHeight;
+const logoSize = 60;
+const topBarH = 36;
+const bottomBarH = 36;
 
-let x = Math.random() * (innerWidth - logoW);
-let y = Math.random() * (innerHeight - logoH);
-let dx = (Math.random() > 0.5 ? 1.6 : -1.6);  // ← 70% of original speed
+let x = Math.random() * (innerWidth - logoSize);
+let y = topBarH + Math.random() * (innerHeight - topBarH - bottomBarH - logoSize);
+let dx = (Math.random() > 0.5 ? 1.6 : -1.6);  // 70% speed
 let dy = (Math.random() > 0.5 ? 1.6 : -1.6);
+
 let shuffled = [...slides];
 for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 }
-let current = 0;
+let current = -1; // will become 0 on first hit
 
-// start
-shuffled[0].classList.add('active');
-captionEl.textContent = captions["01.jpg"] || "";
+function nextSlide() {
+    if (current >= 0) shuffled[current].classList.remove('active');
+    current = (current + 1) % shuffled.length;
+    shuffled[current].classList.add('active');
+    const file = shuffled[current].querySelector('img').src.split('/').pop();
+    const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
+    captionEl.textContent = captions[base] || "";
+}
+
+// start with first image
+nextSlide();
 
 function animate() {
     x += dx; y += dy;
     let hit = false;
 
-    // Bounce off top bar
+    // Top bar
     if (y <= topBarH) { y = topBarH; dy = -dy; hit = true; }
-    // Bounce off bottom bar
-    if (y >= innerHeight - bottomBarH - logoH) { y = innerHeight - bottomBarH - logoH; dy = -dy; hit = true; }
-    // Bounce off screen edges
-    if (x <= 0 || x >= innerWidth - logoW) { dx = -dx; hit = true; }
+    // Bottom bar
+    if (y >= innerHeight - bottomBarH - logoSize) { y = innerHeight - bottomBarH - logoSize; dy = -dy; hit = true; }
+    // Left & right walls
+    if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; hit = true; }
 
-    // Bounce off Contact button (dead center)
-    const btnX = innerWidth/2 - btnW/2;
-    const btnY = innerHeight/2 - btnH/2;
-    if (x < btnX + btnW && x + logoW > btnX && y < btnY + btnH && y + logoH > btnY) {
-        if (Math.abs(dx) > Math.abs(dy)) dx = -dx;
-        else dy = -dy;
-        contactBtn.classList.add('hit');
-        setTimeout(() => contactBtn.classList.remove('hit'), 300);
+    // Contact button collision (perfect collision + visual hit)
+    const btnRect = btn.getBoundingClientRect();
+    if (
+        x < btnRect.right - 10 && 
+        x + logoSize > btnRect.left + 10 &&
+        y < btnRect.bottom - 10 &&
+        y + logoSize > btnRect.top + 10
+    ) {
+        // push logo out of button and reverse correct direction
+        if (Math.abs(dx) > Math.abs(dy)) {
+            dx = x < btnRect.left + btnRect.width/2 ? -Math.abs(dx) : Math.abs(dx);
+        } else {
+            dy = y < btnRect.top + btnRect.height/2 ? -Math.abs(dy) : Math.abs(dy);
+        }
+        btn.classList.add('hit');
+        setTimeout(() => btn.classList.remove('hit'), 300);
         hit = true;
     }
 
     logo.style.transform = `translate(${x}px, ${y}px)`;
 
-    if (hit) {
-        shuffled[current].classList.remove('active');
-        current = (current + 1) % shuffled.length;
-        shuffled[current].classList.add('active');
-        const file = shuffled[current].querySelector('img').src.split('/').pop();
-        const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
-        captionEl.textContent = captions[base] || "";
-    }
+    if (hit) nextSlide();
 
     requestAnimationFrame(animate);
 }
@@ -181,8 +189,8 @@ function animate() {
 animate();
 
 window.addEventListener('resize', () => {
-    x = Math.max(0, Math.min(x, innerWidth - logoW));
-    y = Math.max(topBarH, Math.min(y, innerHeight - bottomBarH - logoH));
+    x = Math.max(0, Math.min(x, innerWidth - logoSize));
+    y = Math.max(topBarH, Math.min(y, innerHeight - bottomBarH - logoSize));
 });
 </script>
 </body>
