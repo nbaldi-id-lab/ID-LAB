@@ -10,21 +10,20 @@
 
     .slide{
         position:fixed;top:0;left:0;width:100vw;height:100vh;
-        opacity:0;transition:opacity 0.2s ease-in-out;z-index:1; /* ← almost instant */
+        opacity:0;transition:opacity 0.2s ease-in-out;z-index:1;
     }
     .slide img{width:100%;height:100%;object-fit:cover;}
     .slide.active{opacity:1;}
 
-    /* Top & bottom bars — same height, solid black, no transparency flicker */
-   .top-bar, .caption-bar{
-    position:fixed;left:0;width:100%;background:#000;z-index:30;
-    height:36px;display:flex;align-items:center;justify-content:center;
-}
-.top-bar{top:0;}
-.caption-bar{bottom:0;}
+    .top-bar, .caption-bar{
+        position:fixed;left:0;width:100%;background:#000;z-index:30;
+        height:36px;display:flex;align-items:center;justify-content:center;
+    }
+    .top-bar{top:0;}
+    .caption-bar{bottom:0;}
 
     .top-text, .caption{
-        color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;
+        color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;line-height:1.4;
     }
 
     .logo{
@@ -33,17 +32,16 @@
         filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));
     }
 
-.contact-btn{
-    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-    z-index:40;color:white;text-decoration:none;text-transform:uppercase;
-    font-size:8px;font-weight:bold;letter-spacing:1.4px;
-    border:1.5px solid white;padding:4px 4px;transition:all .25s;
-    background:transparent;
-}
-.contact-btn:hover, .contact-btn.hit{
-    background:white;color:black;
-}
-   
+    .contact-btn{
+        position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+        z-index:40;color:white;text-decoration:none;text-transform:uppercase;
+        font-size:8px;font-weight:bold;letter-spacing:1.4px;
+        border:1.5px solid white;padding:4px 4px;transition:all .25s;
+        background:transparent;
+    }
+    .contact-btn:hover, .contact-btn.hit{
+        background:white;color:black;
+    }
 </style>
 </head>
 <body>
@@ -71,7 +69,6 @@
 <div class="slide"><img src="Images/20.jpg"></div>
 <div class="slide"><img src="Images/21.jpg"></div>
 <div class="slide"><img src="Images/22.jpg"></div>
-<div class="slide"><img src="Images/23.jpg"></div>
 
 <!-- Top description -->
 <div class="top-bar">
@@ -81,7 +78,7 @@
     </div>
 </div>
 
-<!-- Bouncing logo – now 60px -->
+<!-- Bouncing logo -->
 <img class="logo" src="logo.png" alt="ID-LAB NYC">
 
 <!-- Contact button -->
@@ -115,7 +112,7 @@ const captions = {
     "19.jpg": "OMA · Louis Vuitton Visionary Journeys – Trunkscape · Osaka · 2025",
     "20.jpg": "OMA · Louis Vuitton Visionary Journeys – LV& Japan · Osaka · 2025",
     "21.jpg": "OMA · Louis Vuitton Visionary Journeys – Atelier · Osaka · 2025",
-    "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials · Osaka · 2025",
+    "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials · Osaka · 2025"
 };
 
 const logo = document.querySelector('.logo');
@@ -146,14 +143,10 @@ function animate() {
     x += dx; y += dy;
     let edgeHit = false;
 
-    // Top bar
     if (y <= topBarH) { y = topBarH; dy = -dy; edgeHit = true; }
-    // Bottom bar
     if (y >= innerHeight - bottomBarH - logoSize) { y = innerHeight - bottomBarH - logoSize; dy = -dy; edgeHit = true; }
-    // Left / right edges
     if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; edgeHit = true; }
 
-    // Contact button — perfect rectangle collision, NO direction reverse, only visual hit
     const r = btn.getBoundingClientRect();
     const logoRight = x + logoSize;
     const logoBottom = y + logoSize;
@@ -161,10 +154,8 @@ function animate() {
     if (logoRight > r.left && x < r.right && logoBottom > r.top && y < r.bottom) {
         btn.classList.add('hit');
         setTimeout(() => btn.classList.remove('hit'), 300);
-        // logo keeps going forward naturally — no bounce, no image change
     }
 
-    // Only change image when hitting screen edges or bars
     if (edgeHit) {
         shuffled[current].classList.remove('active');
         current = (current + 1) % shuffled.length;
