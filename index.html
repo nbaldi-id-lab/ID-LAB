@@ -36,13 +36,14 @@
 .contact-btn{
     position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
     z-index:40;color:white;text-decoration:none;text-transform:uppercase;
-    font-size:11px;font-weight:bold;letter-spacing:1.3px;
-    border:1px solid white;padding:6px 16px;transition:all .25s;
+    font-size:10px;font-weight:bold;letter-spacing:1.4px;
+    border:1px solid white;padding:5px 12px;transition:all .25s;
     background:transparent;
 }
 .contact-btn:hover, .contact-btn.hit{
     background:white;color:black;
 }
+   
 </style>
 </head>
 <body>
@@ -135,46 +136,42 @@ for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 }
-let current = -1;
+let current = 0;
 
-function nextSlide() {
-    if (current >= 0) shuffled[current].classList.remove('active');
-    current = (current + 1) % shuffled.length;
-    shuffled[current].classList.add('active');
-    const file = shuffled[current].querySelector('img').src.split('/').pop();
-    const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
-    captionEl.textContent = captions[base] || "";
-}
-nextSlide(); // first image
+shuffled[0].classList.add('active');
+captionEl.textContent = captions["01.jpg"] || "";
 
 function animate() {
     x += dx; y += dy;
-    let wallHit = false;
+    let edgeHit = false;
 
     // Top bar
-    if (y <= topBarH) { y = topBarH; dy = -dy; wallHit = true; }
+    if (y <= topBarH) { y = topBarH; dy = -dy; edgeHit = true; }
     // Bottom bar
-    if (y >= innerHeight - bottomBarH - logoSize) { y = innerHeight - bottomBarH - logoSize; dy = -dy; wallHit = true; }
-    // Left / right walls
-    if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; wallHit = true; }
+    if (y >= innerHeight - bottomBarH - logoSize) { y = innerHeight - bottomBarH - logoSize; dy = -dy; edgeHit = true; }
+    // Left / right edges
+    if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; edgeHit = true; }
 
-    // Contact button collision — uses real border rectangle, no image change
+    // Contact button — perfect rectangle collision, NO direction reverse, only visual hit
     const r = btn.getBoundingClientRect();
-    const hitLeft   = x + logoSize > r.left && x < r.left && y + logoSize > r.top && y < r.bottom;
-    const hitRight  = x < r.right && x + logoSize > r.right && y + logoSize > r.top && y < r.bottom;
-    const hitTop    = y + logoSize > r.top && y < r.top && x + logoSize > r.left && x < r.right;
-    const hitBottom = y < r.bottom && y + logoSize > r.bottom && x + logoSize > r.left && x < r.right;
+    const logoRight = x + logoSize;
+    const logoBottom = y + logoSize;
 
-    if (hitLeft || hitRight || hitTop || hitBottom) {
-        if (hitLeft || hitRight) dx = -dx;
-        if (hitTop || hitBottom) dy = -dy;
+    if (logoRight > r.left && x < r.right && logoBottom > r.top && y < r.bottom) {
         btn.classList.add('hit');
         setTimeout(() => btn.classList.remove('hit'), 300);
-        // no nextSlide() here → only visual invert
+        // logo keeps going forward naturally — no bounce, no image change
     }
 
-    // Only change image on wall / bar hits
-    if (wallHit) nextSlide();
+    // Only change image when hitting screen edges or bars
+    if (edgeHit) {
+        shuffled[current].classList.remove('active');
+        current = (current + 1) % shuffled.length;
+        shuffled[current].classList.add('active');
+        const file = shuffled[current].querySelector('img').src.split('/').pop();
+        const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
+        captionEl.textContent = captions[base] || "";
+    }
 
     logo.style.transform = `translate(${x}px, ${y}px)`;
     requestAnimationFrame(animate);
