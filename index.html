@@ -149,7 +149,7 @@ for (let i = shuffled.length - 1; i > 0; i--) {
 let current = 0;
 
 shuffled[0].classList.add('active');
-captionEl.textContent = captions["01.jpg"] || "";
+captionEl.innerHTML = captions["01.jpg"] || "";
 
 function animate() {
     x += dx; y += dy;
@@ -174,7 +174,7 @@ function animate() {
         shuffled[current].classList.add('active');
         const file = shuffled[current].querySelector('img').src.split('/').pop();
         const base = file.replace(/-B\.jpg|-C\.jpg/gi, '.jpg');
-        captionEl.textContent = captions[base] || "";
+        captionEl.innerHTML = captions[base] || "";
     }
 
     logo.style.transform = `translate(${x}px, ${y}px)`;
