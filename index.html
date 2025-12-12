@@ -141,7 +141,10 @@ list[i].classList.add('active');
 captionEl.innerHTML = captions["01.jpg"] || "";
 
 // Click anywhere = next image
-document.body.addEventListener('click', nextSlide);
+document.body.addEventListener('click', function(e) {
+    if (e.target.closest('.contact-btn')) return;  // ← ignore clicks on Contact button
+    nextSlide();
+});
 document.body.addEventListener('touchstart', e => {e.preventDefault(); nextSlide();});
 
 function nextSlide() {
