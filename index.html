@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ID-LAB NYC</title>
+
+<!-- Preload the first image + logo so the site feels instant -->
+<link rel="preload" href="Images/01.jpg" as="image">
+<link rel="preload" href="logo.png" as="image">
+<link rel="preload" href="logo-white.png" as="image">
+
 <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body{background:#000;overflow:hidden;font-family:Helvetica,Arial,sans-serif;position:relative;}
@@ -11,6 +17,8 @@
     .slide{position:fixed;top:0;left:0;width:100vw;height:100vh;opacity:0;transition:opacity 0.2s ease-in-out;z-index:1;}
     .slide img{width:100%;height:100%;object-fit:cover;}
     .slide.active{opacity:1;}
+    /* Lazy-load the rest of the images (huge performance win) */
+    .slide:not(.active) img{loading:lazy;}
 
     .top-bar,.caption-bar{position:fixed;left:0;width:100%;background:#000;z-index:30;height:36px;display:flex;align-items:center;justify-content:center;transition:all .3s;}
     .top-bar{top:0;}
@@ -20,7 +28,24 @@
     .top-bar.hit,.caption-bar.hit{background:#fff;}
     .top-bar.hit .top-text,.caption-bar.hit .caption{color:#000;}
 
-    .logo{position:fixed;width:60px;height:auto;z-index:40;pointer-events:none;user-select:none;filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));}
+    /* LOGO – now clickable + super fast movement */
+    .logo{
+        position:fixed;
+        width:60px;
+        height:auto;
+        z-index:40;
+        cursor:pointer;           /* shows it’s clickable */
+        user-select:none;
+        filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));
+        transition:transform 0.09s ease-out;   /* ← lightning fast on desktop */
+        pointer-events:auto;      /* allow clicks */
+    }
+    /* Slower & smoother on phones/tablets */
+    @media (pointer: coarse) or (max-width:1024px){
+        .logo{transition:transform 0.25s ease-out;}
+    }
+    /* Tiny squeeze when you tap/click */
+    .logo:active{transform:scale(0.92) !important;}
 
     .contact-btn{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:40;color:white;text-decoration:none;text-transform:uppercase;font-size:10px;font-weight:bold;letter-spacing:1.4px;border:1px solid white;padding:5px 12px;transition:all .25s;background:transparent;}
     .contact-btn:hover,.contact-btn.hit{background:white;color:black;}
@@ -54,7 +79,7 @@
 
 <div class="top-bar"><div class="top-text">ID-LAB IS AN ARCHITECTURE AND INTERIOR DESIGN PRACTICE<br>BASED IN NYC, DEDICATED TO IDENTITY-DRIVEN DESIGN</div></div>
 
-<img class="logo" src="logo.png" alt="ID-LAB NYC">
+<img class="logo" id="floating-logo" src="logo.png" alt="ID-LAB NYC">
 
 <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
 
@@ -86,7 +111,8 @@ const captions = {
     "21.jpg": "OMA · Louis Vuitton Visionary Journeys – Atelier<br>Osaka · 2025",
     "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials<br>Osaka · 2025"
 };
-const logo = document.querySelector('.logo');
+
+const logo = document.getElementById('floating-logo');
 const slides = document.querySelectorAll('.slide');
 const captionEl = document.getElementById('caption');
 const btn = document.querySelector('.contact-btn');
@@ -99,8 +125,8 @@ const bottomBarH = 36;
 
 let x = Math.random() * (innerWidth - logoSize);
 let y = topBarH + Math.random() * (innerHeight - topBarH - bottomBarH - logoSize);
-let dx = (Math.random() > 0.5 ? 1.6 : -1.6);
-let dy = (Math.random() > 0.5 ? 1.6 : -1.6);
+let dx = (Math.random() > 0.5 ? 2.2 : -2.2);  // a bit faster overall
+let dy = (Math.random() > 0.5 ? 2.2 : -2.2);
 
 let shuffled = [...slides];
 for (let i = shuffled.length - 1; i > 0; i--) {
@@ -111,6 +137,15 @@ let current = 0;
 
 shuffled[0].classList.add('active');
 captionEl.innerHTML = captions["01.jpg"] || "";
+
+// Click/tap the logo → toggle between black and white version
+logo.addEventListener('click', () => {
+    if (logo.src.endsWith('logo.png')) {
+        logo.src = 'logo-white.png';
+    } else {
+        logo.src = 'logo.png';
+    }
+});
 
 function animate() {
     x += dx; y += dy;
