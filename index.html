@@ -125,8 +125,11 @@ const topH = 36, bottomH = 36;
 
 let x = Math.random() * (innerWidth - logoSize);
 let y = topH + Math.random() * (innerHeight - topH - bottomH - logoSize);
-let dx = (Math.random() > 0.5 ? 4.4 : -4.4);  // super fast on desktop
-let dy = (Math.random() > 0.5 ? 4.4 : -4.4);
+
+const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || innerWidth <= 1024;
+const speed = isMobile ? 2.2 : 5.8;
+let dx = (Math.random() > 0.5 ? speed : -speed);
+let dy = (Math.random() > 0.5 ? speed : -speed);
 
 let list = [...slides];
 for (let i = list.length - 1; i > 0; i--) {
