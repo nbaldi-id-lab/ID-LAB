@@ -5,54 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ID-LAB NYC</title>
 
-<!-- Preload the first image + logo so the site feels instant -->
+<!-- Preload first image + logo so site never starts blank -->
 <link rel="preload" href="Images/01.jpg" as="image">
 <link rel="preload" href="logo.png" as="image">
-<link rel="preload" href="logo-white.png" as="image">
 
 <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{background:#000;overflow:hidden;font-family:Helvetica,Arial,sans-serif;position:relative;}
+    body{background:#000;overflow:hidden;font-family:Helvetica,Arial,sans-serif;position:relative;cursor:pointer;} /* cursor shows clickable */
 
-    .slide{position:fixed;top:0;left:0;width:100vw;height:100vh;opacity:0;transition:opacity 0.2s ease-in-out;z-index:1;}
+    .slide{
+        position:fixed;top:0;left:0;width:100vw;height:100vh;
+        opacity:0;transition:opacity 0.35s ease;z-index:1;
+        background:#000; /* fallback black while image loads */
+    }
     .slide img{width:100%;height:100%;object-fit:cover;}
     .slide.active{opacity:1;}
-    /* Lazy-load the rest of the images (huge performance win) */
     .slide:not(.active) img{loading:lazy;}
 
-    .top-bar,.caption-bar{position:fixed;left:0;width:100%;background:#000;z-index:30;height:36px;display:flex;align-items:center;justify-content:center;transition:all .3s;}
+    .top-bar,.caption-bar{
+        position:fixed;left:0;width:100%;background:#000;z-index:30;height:36px;
+        display:flex;align-items:center;justify-content:center;transition:all .3s;
+    }
     .top-bar{top:0;}
     .caption-bar{bottom:0;align-items:flex-start;padding-top:8px;}
 
-    .top-text,.caption{color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;text-align:center;line-height:1.4;transition:all .3s;}
+    .top-text,.caption{
+        color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;
+        text-align:center;line-height:1.4;transition:all .3s;
+    }
     .top-bar.hit,.caption-bar.hit{background:#fff;}
     .top-bar.hit .top-text,.caption-bar.hit .caption{color:#000;}
 
-    /* LOGO – now clickable + super fast movement */
     .logo{
-        position:fixed;
-        width:60px;
-        height:auto;
-        z-index:40;
-        cursor:pointer;           /* shows it’s clickable */
-        user-select:none;
+        position:fixed;width:60px;height:auto;z-index:40;
+        user-select:none;pointer-events:none; /* logo itself not clickable */
         filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));
-        transition:transform 0.09s ease-out;   /* ← lightning fast on desktop */
-        pointer-events:auto;      /* allow clicks */
     }
-    /* Slower & smoother on phones/tablets */
-    @media (pointer: coarse) or (max-width:1024px){
-        .logo{transition:transform 0.25s ease-out;}
-    }
-    /* Tiny squeeze when you tap/click */
-    .logo:active{transform:scale(0.92) !important;}
 
-    .contact-btn{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:40;color:white;text-decoration:none;text-transform:uppercase;font-size:10px;font-weight:bold;letter-spacing:1.4px;border:1px solid white;padding:5px 12px;transition:all .25s;background:transparent;}
+    .contact-btn{
+        position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+        z-index:40;color:white;text-decoration:none;text-transform:uppercase;
+        font-size:10px;font-weight:bold;letter-spacing:1.4px;
+        border:1px solid white;padding:5px 12px;transition:all .25s;
+    }
     .contact-btn:hover,.contact-btn.hit{background:white;color:black;}
 </style>
 </head>
 <body>
 
+<!-- All slides (first one starts active so we never see blank) -->
 <div class="slide active"><img src="Images/01.jpg"></div>
 <div class="slide"><img src="Images/02.jpg"></div>
 <div class="slide"><img src="Images/03.jpg"></div>
@@ -79,14 +80,14 @@
 
 <div class="top-bar"><div class="top-text">ID-LAB IS AN ARCHITECTURE AND INTERIOR DESIGN PRACTICE<br>BASED IN NYC, DEDICATED TO IDENTITY-DRIVEN DESIGN</div></div>
 
-<img class="logo" id="floating-logo" src="logo.png" alt="ID-LAB NYC">
+<img class="logo" id="logo" src="logo.png" alt="ID-LAB NYC">
 
 <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
 
 <div class="caption-bar"><div class="caption" id="caption"></div></div>
 
 <script>
-const captions = {
+const captions = { /* your full captions object - unchanged */ 
     "01.jpg": "OMA · Louis Vuitton Visionary Journeys – Origins<br>Osaka · 2025",
     "02.jpg": "OMA · Louis Vuitton Visionary Journeys – Monogram<br>Osaka · 2025",
     "03.jpg": "OMA · Louis Vuitton Visionary Journeys – Trunkscape<br>Bangkok · 2024",
@@ -112,65 +113,61 @@ const captions = {
     "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials<br>Osaka · 2025"
 };
 
-const logo = document.getElementById('floating-logo');
 const slides = document.querySelectorAll('.slide');
+const logo = document.getElementById('logo');
 const captionEl = document.getElementById('caption');
-const btn = document.querySelector('.contact-btn');
 const topBar = document.querySelector('.top-bar');
 const bottomBar = document.querySelector('.caption-bar');
+const contactBtn = document.querySelector('.contact-btn');
 
 const logoSize = 60;
-const topBarH = 36;
-const bottomBarH = 36;
+const topH = 36, bottomH = 36;
 
 let x = Math.random() * (innerWidth - logoSize);
-let y = topBarH + Math.random() * (innerHeight - topBarH - bottomBarH - logoSize);
-let dx = (Math.random() > 0.5 ? 2.2 : -2.2);  // a bit faster overall
-let dy = (Math.random() > 0.5 ? 2.2 : -2.2);
+let y = topH + Math.random() * (innerHeight - topH - bottomH - logoSize);
+let dx = (Math.random() > 0.5 ? 4.4 : -4.4);  // super fast on desktop
+let dy = (Math.random() > 0.5 ? 4.4 : -4.4);
 
-let shuffled = [...slides];
-for (let i = shuffled.length - 1; i > 0; i--) {
+let list = [...slides];
+for (let i = list.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    [list[i], list[j]] = [list[j], list[i]];
 }
-let current = 0;
-
-shuffled[0].classList.add('active');
+let i = 0;
+list[i].classList.add('active');
 captionEl.innerHTML = captions["01.jpg"] || "";
 
-// Click/tap the logo → toggle between black and white version
-logo.addEventListener('click', () => {
-    if (logo.src.endsWith('logo.png')) {
-        logo.src = 'logo-white.png';
-    } else {
-        logo.src = 'logo.png';
-    }
-});
+// Click anywhere = next image
+document.body.addEventListener('click', nextSlide);
+document.body.addEventListener('touchstart', e => {e.preventDefault(); nextSlide();});
+
+function nextSlide() {
+    list[i].classList.remove('active');
+    i = (i + 1) % list.length;
+    list[i].classList.add('active');
+    
+    const file = list[i].querySelector('img').src.split('/').pop();
+    const key = file.replace(/-B\.jpg/gi, '.jpg');
+    captionEl.innerHTML = captions[key] || "";
+}
 
 function animate() {
     x += dx; y += dy;
-    let edgeHit = false;
+    let hit = false;
 
-    if (y <= topBarH) { y = topBarH; dy = -dy; edgeHit = true; topBar.classList.add('hit'); setTimeout(() => topBar.classList.remove('hit'), 300); }
-    if (y >= innerHeight - bottomBarH - logoSize) { y = innerHeight - bottomBarH - logoSize; dy = -dy; edgeHit = true; bottomBar.classList.add('hit'); setTimeout(() => bottomBar.classList.remove('hit'), 300); }
-    if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; edgeHit = true; }
+    if (y <= topH) { y = topH; dy = -dy; hit = true; topBar.classList.add('hit'); setTimeout(()=>topBar.classList.remove('hit'),300); }
+    if (y >= innerHeight - bottomH - logoSize) { y = innerHeight - bottomH - logoSize; dy = -dy; hit = true; bottomBar.classList.add('hit'); setTimeout(()=>bottomBar.classList.remove('hit'),300); }
+    if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; hit = true; }
 
-    const r = btn.getBoundingClientRect();
-    const logoRight = x + logoSize;
-    const logoBottom = y + logoSize;
-    if (logoRight > r.left && x < r.right && logoBottom > r.top && y < r.bottom) {
-        btn.classList.add('hit');
-        setTimeout(() => btn.classList.remove('hit'), 300);
+    // contact button hit
+    const r = contactBtn.getBoundingClientRect();
+    if (x + logoSize > r.left && x < r.right && y + logoSize > r.top && y < r.bottom) {
+        contactBtn.classList.add('hit');
+        setTimeout(()=>contactBtn.classList.remove('hit'),300);
     }
 
-    if (edgeHit) {
-        shuffled[current].classList.remove('active');
-        current = (current + 1) % shuffled.length;
-        shuffled[current].classList.add('active');
-        const file = shuffled[current].querySelector('img').src.split('/').pop();
-        const base = file.replace(/-B\.jpg/gi, '.jpg');
-        captionEl.innerHTML = captions[base] || "";
-    }
+    // edge hit = also go to next slide
+    if (hit) nextSlide();
 
     logo.style.transform = `translate(${x}px, ${y}px)`;
     requestAnimationFrame(animate);
@@ -180,7 +177,7 @@ animate();
 
 window.addEventListener('resize', () => {
     x = Math.max(0, Math.min(x, innerWidth - logoSize));
-    y = Math.max(topBarH, Math.min(y, innerHeight - topBarH - bottomBarH - logoSize));
+    y = Math.max(topH, Math.min(y, innerHeight - topH - bottomH - logoSize));
 });
 </script>
 </body>
