@@ -142,10 +142,14 @@ captionEl.innerHTML = captions["01.jpg"] || "";
 
 // Click anywhere = next image
 document.body.addEventListener('click', function(e) {
-    if (e.target.closest('.contact-btn')) return;  // ← ignore clicks on Contact button
+    if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
     nextSlide();
 });
-document.body.addEventListener('touchstart', e => {e.preventDefault(); nextSlide();});
+document.body.addEventListener('touchstart', function(e) {
+    if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
+    e.preventDefault();
+    nextSlide();
+});
 
 function nextSlide() {
     list[i].classList.remove('active');
