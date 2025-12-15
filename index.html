@@ -87,7 +87,7 @@
 <div class="caption-bar"><div class="caption" id="caption"></div></div>
 
 <script>
-const captions = { /* your full captions object - unchanged */ 
+const captions = { 
     "01.jpg": "OMA · Louis Vuitton Visionary Journeys – Origins<br>Osaka · 2025",
     "02.jpg": "OMA · Louis Vuitton Visionary Journeys – Monogram<br>Osaka · 2025",
     "03.jpg": "OMA · Louis Vuitton Visionary Journeys – Trunkscape<br>Bangkok · 2024",
@@ -140,17 +140,35 @@ let i = 0;
 list[i].classList.add('active');
 captionEl.innerHTML = captions["01.jpg"] || "";
 
-// Click anywhere = next image
-document.body.addEventListener('click', function(e) {
-    if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
-    nextSlide();
-});
-document.body.addEventListener('touchstart', function(e) {
-    if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
-    e.preventDefault();
-    nextSlide();
+// === PRELOADING LOGIC ===
+const imageUrls = Array.from(slides).map(slide => slide.querySelector('img').src);
+let loadedCount = 0;
+const minImagesToStartAuto = 5; // Wait for at least first 5 images before auto-play starts
+let autoPlayEnabled = false;
+
+function preloadImage(url) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => { loadedCount++; resolve(); };
+        img.onerror = () => { loadedCount++; resolve(); }; // count even if error
+        img.src = url;
+    });
+}
+
+// Preload all images in parallel
+Promise.all(imageUrls.map(preloadImage)).then(() => {
+    autoPlayEnabled = true; // All done – definitely enable
 });
 
+// Check periodically if enough images are loaded to start auto-play
+const preloadCheckInterval = setInterval(() => {
+    if (loadedCount >= minImagesToStartAuto) {
+        autoPlayEnabled = true;
+        clearInterval(preloadCheckInterval);
+    }
+}, 300);
+
+// === SLIDESHOW FUNCTIONS ===
 function nextSlide() {
     list[i].classList.remove('active');
     i = (i + 1) % list.length;
@@ -161,6 +179,18 @@ function nextSlide() {
     captionEl.innerHTML = captions[key] || "";
 }
 
+// Manual click/touch always works immediately
+document.body.addEventListener('click', function(e) {
+    if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
+    nextSlide();
+});
+document.body.addEventListener('touchstart', function(e) {
+    if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
+    e.preventDefault();
+    nextSlide();
+});
+
+// === LOGO ANIMATION ===
 function animate() {
     x += dx; y += dy;
     let hit = false;
@@ -176,14 +206,16 @@ function animate() {
         setTimeout(()=>contactBtn.classList.remove('hit'),300);
     }
 
-    // edge hit = also go to next slide
-    if (hit) nextSlide();
+    // Only advance slide automatically when enough images are preloaded
+    if (hit && autoPlayEnabled) {
+        nextSlide();
+    }
 
     logo.style.transform = `translate(${x}px, ${y}px)`;
     requestAnimationFrame(animate);
 }
 
-animate();
+animate(); // Start animation immediately (logo moves, but no auto-slide until preloaded)
 
 window.addEventListener('resize', () => {
     x = Math.max(0, Math.min(x, innerWidth - logoSize));
