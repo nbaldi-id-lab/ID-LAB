@@ -136,50 +136,52 @@ for (let i = list.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [list[i], list[j]] = [list[j], list[i]];
 }
-let i = 0;
-list[i].classList.add('active');
-captionEl.innerHTML = captions["01.jpg"] || "";
+let currentIndex = 0;
+list[currentIndex].classList.add('active');
 
-// === PRELOADING LOGIC ===
-const imageUrls = Array.from(slides).map(slide => slide.querySelector('img').src);
-let loadedCount = 0;
-const minImagesToStartAuto = 5; // Wait for at least first 5 images before auto-play starts
+// === LOADING PERCENTAGE DISPLAY ===
+const allImages = Array.from(slides).map(slide => slide.querySelector('img'));
+const totalImages = allImages.length;
+let loadedImages = 0;
 let autoPlayEnabled = false;
 
-function preloadImage(url) {
-    return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => { loadedCount++; resolve(); };
-        img.onerror = () => { loadedCount++; resolve(); }; // count even if error
-        img.src = url;
-    });
-}
+captionEl.innerHTML = "Loading slideshow – 0%";
 
-// Preload all images in parallel
-Promise.all(imageUrls.map(preloadImage)).then(() => {
-    autoPlayEnabled = true; // All done – definitely enable
+allImages.forEach(img => {
+    if (img.complete && img.naturalHeight !== 0) {
+        incrementLoaded();
+    } else {
+        img.addEventListener('load', incrementLoaded);
+        img.addEventListener('error', incrementLoaded); // count errors too so we don't hang
+    }
 });
 
-// Check periodically if enough images are loaded to start auto-play
-const preloadCheckInterval = setInterval(() => {
-    if (loadedCount >= minImagesToStartAuto) {
-        autoPlayEnabled = true;
-        clearInterval(preloadCheckInterval);
-    }
-}, 300);
+function incrementLoaded() {
+    loadedImages++;
+    const percent = Math.round((loadedImages / totalImages) * 100);
+    captionEl.innerHTML = `Loading slideshow – ${percent}%`;
 
-// === SLIDESHOW FUNCTIONS ===
+    if (loadedImages === totalImages) {
+        // All loaded → switch to normal caption and enable auto-play
+        const file = list[currentIndex].querySelector('img').src.split('/').pop();
+        const key = file.replace(/-B\.jpg/gi, '.jpg');
+        captionEl.innerHTML = captions[key] || "";
+        autoPlayEnabled = true;
+    }
+}
+
+// === NEXT SLIDE ===
 function nextSlide() {
-    list[i].classList.remove('active');
-    i = (i + 1) % list.length;
-    list[i].classList.add('active');
-    
-    const file = list[i].querySelector('img').src.split('/').pop();
+    list[currentIndex].classList.remove('active');
+    currentIndex = (currentIndex + 1) % list.length;
+    list[currentIndex].classList.add('active');
+
+    const file = list[currentIndex].querySelector('img').src.split('/').pop();
     const key = file.replace(/-B\.jpg/gi, '.jpg');
     captionEl.innerHTML = captions[key] || "";
 }
 
-// Manual click/touch always works immediately
+// Manual navigation always works
 document.body.addEventListener('click', function(e) {
     if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
     nextSlide();
@@ -199,23 +201,19 @@ function animate() {
     if (y >= innerHeight - bottomH - logoSize) { y = innerHeight - bottomH - logoSize; dy = -dy; hit = true; bottomBar.classList.add('hit'); setTimeout(()=>bottomBar.classList.remove('hit'),300); }
     if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; hit = true; }
 
-    // contact button hit
     const r = contactBtn.getBoundingClientRect();
     if (x + logoSize > r.left && x < r.right && y + logoSize > r.top && y < r.bottom) {
         contactBtn.classList.add('hit');
         setTimeout(()=>contactBtn.classList.remove('hit'),300);
     }
 
-    // Only advance slide automatically when enough images are preloaded
-    if (hit && autoPlayEnabled) {
-        nextSlide();
-    }
+    if (hit && autoPlayEnabled) nextSlide();
 
     logo.style.transform = `translate(${x}px, ${y}px)`;
     requestAnimationFrame(animate);
 }
 
-animate(); // Start animation immediately (logo moves, but no auto-slide until preloaded)
+animate(); // Logo starts bouncing right away (nice feedback while loading)
 
 window.addEventListener('resize', () => {
     x = Math.max(0, Math.min(x, innerWidth - logoSize));
