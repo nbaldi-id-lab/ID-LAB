@@ -131,15 +131,12 @@ const speed = isMobile ? 2.2 : 5.8;
 let dx = (Math.random() > 0.5 ? speed : -speed);
 let dy = (Math.random() > 0.5 ? speed : -speed);
 
-let list = [...slides];
-for (let i = list.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [list[i], list[j]] = [list[j], list[i]];
-}
+// Ordered list in DOM order (likely fastest to load first)
+let list = Array.from(slides);
 let currentIndex = 0;
 list[currentIndex].classList.add('active');
 
-// === LOADING PERCENTAGE DISPLAY ===
+// Track which images are loaded
 const allImages = Array.from(slides).map(slide => slide.querySelector('img'));
 const totalImages = allImages.length;
 let loadedImages = 0;
@@ -147,12 +144,20 @@ let autoPlayEnabled = false;
 
 captionEl.innerHTML = "Loading slideshow – 0%";
 
-allImages.forEach(img => {
+// Mark slides as loaded when their image finishes
+allImages.forEach((img, idx) => {
     if (img.complete && img.naturalHeight !== 0) {
+        list[idx].dataset.loaded = 'true';
         incrementLoaded();
     } else {
-        img.addEventListener('load', incrementLoaded);
-        img.addEventListener('error', incrementLoaded); // count errors too so we don't hang
+        img.addEventListener('load', () => {
+            list[idx].dataset.loaded = 'true';
+            incrementLoaded();
+        });
+        img.addEventListener('error', () => {
+            list[idx].dataset.loaded = 'true'; // treat error as loaded to avoid infinite skip
+            incrementLoaded();
+        });
     }
 });
 
@@ -161,38 +166,65 @@ function incrementLoaded() {
     const percent = Math.round((loadedImages / totalImages) * 100);
     captionEl.innerHTML = `Loading slideshow – ${percent}%`;
 
-    if (loadedImages === totalImages) {
-        // All loaded → switch to normal caption and enable auto-play
-        const file = list[currentIndex].querySelector('img').src.split('/').pop();
-        const key = file.replace(/-B\.jpg/gi, '.jpg');
-        captionEl.innerHTML = captions[key] || "";
+    if (loadedImages >= 4 && !autoPlayEnabled) {
         autoPlayEnabled = true;
+        updateCaption(); // show real caption for current slide
+    }
+
+    if (loadedImages === totalImages) {
+        // All loaded → reshuffle remaining for random order
+        const remaining = list.slice(currentIndex + 1);
+        for (let i = remaining.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+        }
+        list = list.slice(0, currentIndex + 1).concat(remaining);
+        updateCaption();
     }
 }
 
-// === NEXT SLIDE ===
-function nextSlide() {
-    list[currentIndex].classList.remove('active');
-    currentIndex = (currentIndex + 1) % list.length;
-    list[currentIndex].classList.add('active');
-
+function updateCaption() {
     const file = list[currentIndex].querySelector('img').src.split('/').pop();
     const key = file.replace(/-B\.jpg/gi, '.jpg');
     captionEl.innerHTML = captions[key] || "";
 }
 
-// Manual navigation always works
+function nextSlide(auto = false) {
+    if (auto) {
+        // Find the next loaded slide (skip unloaded ones)
+        let nextIdx = (currentIndex + 1) % list.length;
+        let attempts = 0;
+        while (list[nextIdx].dataset.loaded !== 'true' && attempts < list.length) {
+            nextIdx = (nextIdx + 1) % list.length;
+            attempts++;
+        }
+        // If somehow none loaded (unlikely), do nothing
+        if (list[nextIdx].dataset.loaded !== 'true') return;
+
+        list[currentIndex].classList.remove('active');
+        currentIndex = nextIdx;
+        list[currentIndex].classList.add('active');
+    } else {
+        // Manual click: always go to next, even if not loaded
+        list[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % list.length;
+        list[currentIndex].classList.add('active');
+    }
+
+    updateCaption();
+}
+
+// Manual always advances regardless of load state
 document.body.addEventListener('click', function(e) {
     if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
-    nextSlide();
+    nextSlide(false);
 });
 document.body.addEventListener('touchstart', function(e) {
     if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
     e.preventDefault();
-    nextSlide();
+    nextSlide(false);
 });
 
-// === LOGO ANIMATION ===
 function animate() {
     x += dx; y += dy;
     let hit = false;
@@ -202,23 +234,6 @@ function animate() {
     if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; hit = true; }
 
     const r = contactBtn.getBoundingClientRect();
-    if (x + logoSize > r.left && x < r.right && y + logoSize > r.top && y < r.bottom) {
-        contactBtn.classList.add('hit');
-        setTimeout(()=>contactBtn.classList.remove('hit'),300);
-    }
-
-    if (hit && autoPlayEnabled) nextSlide();
-
-    logo.style.transform = `translate(${x}px, ${y}px)`;
-    requestAnimationFrame(animate);
-}
-
-animate(); // Logo starts bouncing right away (nice feedback while loading)
-
-window.addEventListener('resize', () => {
-    x = Math.max(0, Math.min(x, innerWidth - logoSize));
-    y = Math.max(topH, Math.min(y, innerHeight - topH - bottomH - logoSize));
-});
-</script>
+    if
 </body>
 </html>
