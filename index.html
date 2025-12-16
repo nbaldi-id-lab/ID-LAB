@@ -131,12 +131,10 @@ const speed = isMobile ? 2.2 : 5.8;
 let dx = (Math.random() > 0.5 ? speed : -speed);
 let dy = (Math.random() > 0.5 ? speed : -speed);
 
-// Ordered list in DOM order (likely fastest to load first)
 let list = Array.from(slides);
 let currentIndex = 0;
 list[currentIndex].classList.add('active');
 
-// Track which images are loaded
 const allImages = Array.from(slides).map(slide => slide.querySelector('img'));
 const totalImages = allImages.length;
 let loadedImages = 0;
@@ -144,7 +142,7 @@ let autoPlayEnabled = false;
 
 captionEl.innerHTML = "Loading slideshow – 0%";
 
-// Mark slides as loaded when their image finishes
+// Mark slides as loaded
 allImages.forEach((img, idx) => {
     if (img.complete && img.naturalHeight !== 0) {
         list[idx].dataset.loaded = 'true';
@@ -155,7 +153,7 @@ allImages.forEach((img, idx) => {
             incrementLoaded();
         });
         img.addEventListener('error', () => {
-            list[idx].dataset.loaded = 'true'; // treat error as loaded to avoid infinite skip
+            list[idx].dataset.loaded = 'true';
             incrementLoaded();
         });
     }
@@ -166,19 +164,19 @@ function incrementLoaded() {
     const percent = Math.round((loadedImages / totalImages) * 100);
     captionEl.innerHTML = `Loading slideshow – ${percent}%`;
 
-    if (loadedImages >= 4 && !autoPlayEnabled) {
+    if (loadedImages >= 5 && !autoPlayEnabled) {
         autoPlayEnabled = true;
-        updateCaption(); // show real caption for current slide
+        updateCaption(); // Switch to real caption
     }
 
     if (loadedImages === totalImages) {
-        // All loaded → reshuffle remaining for random order
-        const remaining = list.slice(currentIndex + 1);
+        // Reshuffle remaining slides for random order
+        let remaining = list.slice(currentIndex + 1);
         for (let i = remaining.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
         }
-        list = list.slice(0, currentIndex + 1).concat(remaining);
+        list = [...list.slice(0, currentIndex + 1), ...remaining];
         updateCaption();
     }
 }
@@ -190,31 +188,22 @@ function updateCaption() {
 }
 
 function nextSlide(auto = false) {
-    if (auto) {
-        // Find the next loaded slide (skip unloaded ones)
-        let nextIdx = (currentIndex + 1) % list.length;
-        let attempts = 0;
-        while (list[nextIdx].dataset.loaded !== 'true' && attempts < list.length) {
-            nextIdx = (nextIdx + 1) % list.length;
-            attempts++;
-        }
-        // If somehow none loaded (unlikely), do nothing
-        if (list[nextIdx].dataset.loaded !== 'true') return;
+    let nextIndex = currentIndex;
+    let steps = 0;
 
-        list[currentIndex].classList.remove('active');
-        currentIndex = nextIdx;
-        list[currentIndex].classList.add('active');
-    } else {
-        // Manual click: always go to next, even if not loaded
-        list[currentIndex].classList.remove('active');
-        currentIndex = (currentIndex + 1) % list.length;
-        list[currentIndex].classList.add('active');
-    }
+    do {
+        nextIndex = (nextIndex + 1) % list.length;
+        steps++;
+        if (steps >= list.length) return; // safety
+    } while (auto && list[nextIndex].dataset.loaded !== 'true');
 
+    list[currentIndex].classList.remove('active');
+    currentIndex = nextIndex;
+    list[currentIndex].classList.add('active');
     updateCaption();
 }
 
-// Manual always advances regardless of load state
+// Manual click: always next, no skip
 document.body.addEventListener('click', function(e) {
     if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
     nextSlide(false);
@@ -229,11 +218,30 @@ function animate() {
     x += dx; y += dy;
     let hit = false;
 
-    if (y <= topH) { y = topH; dy = -dy; hit = true; topBar.classList.add('hit'); setTimeout(()=>topBar.classList.remove('hit'),300); }
-    if (y >= innerHeight - bottomH - logoSize) { y = innerHeight - bottomH - logoSize; dy = -dy; hit = true; bottomBar.classList.add('hit'); setTimeout(()=>bottomBar.classList.remove('hit'),300); }
+    if (y <= topH) { y = topH; dy = -dy; hit = true; topBar.classList.add('hit'); setTimeout(() => topBar.classList.remove('hit'), 300); }
+    if (y >= innerHeight - bottomH - logoSize) { y = innerHeight - bottomH - logoSize; dy = -dy; hit = true; bottomBar.classList.add('hit'); setTimeout(() => bottomBar.classList.remove('hit'), 300); }
     if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; hit = true; }
 
     const r = contactBtn.getBoundingClientRect();
-    if
+    if (x + logoSize > r.left && x < r.right && y + logoSize > r.top && y < r.bottom) {
+        contactBtn.classList.add('hit');
+        setTimeout(() => contactBtn.classList.remove('hit'), 300);
+    }
+
+    if (hit && autoPlayEnabled) {
+        nextSlide(true);
+    }
+
+    logo.style.transform = `translate(${x}px, ${y}px)`;
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+    x = Math.max(0, Math.min(x, innerWidth - logoSize));
+    y = Math.max(topH, Math.min(y, innerHeight - topH - bottomH - logoSize));
+});
+</script>
 </body>
 </html>
