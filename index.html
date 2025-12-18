@@ -18,7 +18,17 @@
         opacity:0;transition:opacity 0.35s ease;z-index:1;
         background:#000;
     }
-    .slide img{width:100%;height:100%;object-fit:cover;}
+.slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    transition:opacity 0.6s ease;
+    background:#000;
+}
+.slide.active img{
+    opacity:1;
+}
     .slide.active{opacity:1;}
     /* Lazy load all except the first (first is preloaded and visible immediately) */
     .slide:not(:first-child) img{loading:lazy;}
