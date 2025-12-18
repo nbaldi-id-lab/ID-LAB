@@ -11,16 +11,17 @@
 
 <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{background:#000;overflow:hidden;font-family:Helvetica,Arial,sans-serif;position:relative;cursor:pointer;} /* cursor shows clickable */
+    body{background:#000;overflow:hidden;font-family:Helvetica,Arial,sans-serif;position:relative;cursor:pointer;}
 
     .slide{
         position:fixed;top:0;left:0;width:100vw;height:100vh;
         opacity:0;transition:opacity 0.35s ease;z-index:1;
-        background:#000; /* fallback black while image loads */
+        background:#000;
     }
     .slide img{width:100%;height:100%;object-fit:cover;}
     .slide.active{opacity:1;}
-    .slide:not(.active) img{loading:lazy;}
+    /* Lazy load all except the first (first is preloaded and visible immediately) */
+    .slide:not(:first-child) img{loading:lazy;}
 
     .top-bar,.caption-bar{
         position:fixed;left:0;width:100%;background:#000;z-index:30;height:36px;
@@ -38,7 +39,7 @@
 
     .logo{
         position:fixed;width:60px;height:auto;z-index:40;
-        user-select:none;pointer-events:none; /* logo itself not clickable */
+        user-select:none;pointer-events:none;
         filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));
     }
 
@@ -53,8 +54,8 @@
 </head>
 <body>
 
-<!-- All slides (first one starts active so we never see blank) -->
-<div class="slide active"><img src="Images/01.jpg"></div>
+<!-- All slides -->
+<div class="slide active"><img src="Images/01.jpg" loading="eager"></div> <!-- First one eager + preloaded -->
 <div class="slide"><img src="Images/02.jpg"></div>
 <div class="slide"><img src="Images/03.jpg"></div>
 <div class="slide"><img src="Images/04.jpg"></div>
@@ -84,7 +85,7 @@
 
 <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
 
-<div class="caption-bar"><div class="caption" id="caption"></div></div>
+<div class="caption-bar"><div class="caption" id="caption">Loading slideshow – 0%</div></div>
 
 <script>
 const captions = { 
@@ -133,77 +134,93 @@ let dy = (Math.random() > 0.5 ? speed : -speed);
 
 let list = Array.from(slides);
 let currentIndex = 0;
+
+// Start with first slide active
 list[currentIndex].classList.add('active');
 
 const allImages = Array.from(slides).map(slide => slide.querySelector('img'));
 const totalImages = allImages.length;
 let loadedImages = 0;
 let autoPlayEnabled = false;
+let fullyLoaded = false;
 
 captionEl.innerHTML = "Loading slideshow – 0%";
 
-// Mark slides as loaded
+// Track image loads
 allImages.forEach((img, idx) => {
     if (img.complete && img.naturalHeight !== 0) {
-        list[idx].dataset.loaded = 'true';
-        incrementLoaded();
+        incrementLoaded(idx);
     } else {
-        img.addEventListener('load', () => {
-            list[idx].dataset.loaded = 'true';
-            incrementLoaded();
-        });
-        img.addEventListener('error', () => {
-            list[idx].dataset.loaded = 'true';
-            incrementLoaded();
-        });
+        img.addEventListener('load', () => incrementLoaded(idx));
+        img.addEventListener('error', () => incrementLoaded(idx)); // Treat error as loaded to avoid hanging
     }
 });
 
-function incrementLoaded() {
+function incrementLoaded(idx) {
     loadedImages++;
     const percent = Math.round((loadedImages / totalImages) * 100);
     captionEl.innerHTML = `Loading slideshow – ${percent}%`;
 
+    // Enable autoplay early (after ~5+ images) so bouncing logo can trigger advances
     if (loadedImages >= 5 && !autoPlayEnabled) {
         autoPlayEnabled = true;
-        updateCaption(); // Switch to real caption
+        updateCaption();
     }
 
-    if (loadedImages === totalImages) {
-        // Reshuffle remaining slides for random order
-        let remaining = list.slice(currentIndex + 1);
-        for (let i = remaining.length - 1; i > 0; i--) {
+    // When ALL images are loaded → FULL RANDOM SHUFFLE
+    if (loadedImages === totalImages && !fullyLoaded) {
+        fullyLoaded = true;
+
+        // Fisher-Yates shuffle the entire list
+        for (let i = list.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+            [list[i], list[j]] = [list[j], list[i]];
         }
-        list = [...list.slice(0, currentIndex + 1), ...remaining];
+
+        // Reset currentIndex to 0 (new random first image)
+        list[currentIndex].classList.remove('active');
+        currentIndex = 0;
+        list[currentIndex].classList.add('active');
+
+        // Clear loading text and show real caption
         updateCaption();
     }
 }
 
 function updateCaption() {
+    if (!fullyLoaded && loadedImages < 5) return;
+    
     const file = list[currentIndex].querySelector('img').src.split('/').pop();
     const key = file.replace(/-B\.jpg/gi, '.jpg');
     captionEl.innerHTML = captions[key] || "";
 }
 
 function nextSlide(auto = false) {
-    let nextIndex = currentIndex;
-    let steps = 0;
-
-    do {
-        nextIndex = (nextIndex + 1) % list.length;
-        steps++;
-        if (steps >= list.length) return; // safety
-    } while (auto && list[nextIndex].dataset.loaded !== 'true');
-
-    list[currentIndex].classList.remove('active');
-    currentIndex = nextIndex;
-    list[currentIndex].classList.add('active');
+    // If not all loaded and auto-advancing, skip unloaded slides
+    if (auto && !fullyLoaded) {
+        let nextIndex = currentIndex;
+        let steps = 0;
+        do {
+            nextIndex = (nextIndex + 1) % list.length;
+            steps++;
+            if (steps >= list.length) return;
+        } while (list[nextIndex].querySelector('img').naturalHeight === 0 && 
+                 !list[nextIndex].querySelector('img').complete);
+        
+        list[currentIndex].classList.remove('active');
+        currentIndex = nextIndex;
+        list[currentIndex].classList.add('active');
+    } else {
+        // Manual click or fully loaded → just go to next
+        list[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % list.length;
+        list[currentIndex].classList.add('active');
+    }
+    
     updateCaption();
 }
 
-// Manual click: always next, no skip
+// Click handlers
 document.body.addEventListener('click', function(e) {
     if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
     nextSlide(false);
