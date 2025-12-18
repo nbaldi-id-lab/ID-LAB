@@ -162,8 +162,14 @@ function incrementLoaded(idx) {
     captionEl.innerHTML = `Loading slideshow – ${percent}%`;
 
     // Enable autoplay early (after ~5+ images) so bouncing logo can trigger advances
-    if (loadedImages >= 5 && !autoPlayEnabled) {
+            if (loadedImages >= 5 && !autoPlayEnabled) {
         autoPlayEnabled = true;
+        document.body.style.background = '#000'; // ensures solid black
+        document.querySelectorAll('.top-bar, .caption-bar, .logo, .contact-btn, .slide').forEach(el => {
+            el.style.opacity = '1';
+            el.style.transition = 'opacity 0.8s ease 0.4s';
+        });
+        document.querySelector('.slide.active').style.opacity = '1';
         updateCaption();
     }
 
