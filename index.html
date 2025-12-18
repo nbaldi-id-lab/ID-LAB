@@ -10,6 +10,7 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
+
 body{
     background:#000;
     overflow:hidden;
@@ -18,30 +19,27 @@ body{
     cursor:pointer;
 }
 
-/* SLIDES */
+/* SLIDES — NORMAL STATE */
 .slide{
     position:fixed;
     top:0;left:0;
     width:100vw;height:100vh;
-    opacity:0;
     z-index:1;
     background:#000;
-    transition:opacity 0.35s ease;
+    display:block;
 }
-
-/* BLOCK ALL SLIDES WHILE LOADING */
-body.loading .slide{
-    opacity:0 !important;
-    transition:none;
-}
-
-/* NORMAL BEHAVIOR AFTER START */
-.slide.active{opacity:1;}
-
 .slide img{
     width:100%;
     height:100%;
     object-fit:cover;
+}
+.slide:not(.active){
+    display:none;
+}
+
+/* HARD BLOCK SLIDES DURING LOADING */
+body.loading .slide{
+    display:none !important;
 }
 
 /* UI */
@@ -55,7 +53,6 @@ body.loading .slide{
     display:flex;
     align-items:center;
     justify-content:center;
-    transition:all .3s;
 }
 .top-bar{top:0;}
 .caption-bar{bottom:0;align-items:flex-start;padding-top:8px;}
@@ -68,9 +65,6 @@ body.loading .slide{
     text-align:center;
     line-height:1.4;
 }
-
-.top-bar.hit,.caption-bar.hit{background:#fff;}
-.top-bar.hit .top-text,.caption-bar.hit .caption{color:#000;}
 
 .logo{
     position:fixed;
@@ -94,9 +88,8 @@ body.loading .slide{
     letter-spacing:1.4px;
     border:1px solid white;
     padding:5px 12px;
-    transition:all .25s;
 }
-.contact-btn:hover,.contact-btn.hit{background:white;color:black;}
+.contact-btn:hover{background:white;color:black;}
 </style>
 </head>
 
@@ -128,26 +121,26 @@ body.loading .slide{
 <div class="slide"><img src="Images/22.jpg"></div>
 
 <div class="top-bar">
-    <div class="top-text">
-        ID-LAB IS AN ARCHITECTURE AND INTERIOR DESIGN PRACTICE<br>
-        BASED IN NYC, DEDICATED TO IDENTITY-DRIVEN DESIGN
-    </div>
+  <div class="top-text">
+    ID-LAB IS AN ARCHITECTURE AND INTERIOR DESIGN PRACTICE<br>
+    BASED IN NYC, DEDICATED TO IDENTITY-DRIVEN DESIGN
+  </div>
 </div>
 
-<img class="logo" id="logo" src="logo.png" alt="ID-LAB NYC">
+<img class="logo" src="logo.png">
 <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
 
 <div class="caption-bar">
-    <div class="caption" id="caption">Loading slideshow – 0%</div>
+  <div class="caption" id="caption">Loading slideshow – 0%</div>
 </div>
 
 <script>
-const slides = document.querySelectorAll('.slide');
+const slides = Array.from(document.querySelectorAll('.slide'));
+const images = slides.map(s => s.querySelector('img'));
 const captionEl = document.getElementById('caption');
 
-const images = Array.from(slides).map(s => s.querySelector('img'));
-const total = images.length;
 let loaded = 0;
+let current = 0;
 let started = false;
 
 images.forEach(img=>{
@@ -161,20 +154,22 @@ images.forEach(img=>{
 
 function onLoad(){
     loaded++;
-    captionEl.innerHTML = `Loading slideshow – ${Math.round(loaded/total*100)}%`;
+    captionEl.innerHTML = `Loading slideshow – ${Math.round(loaded/images.length*100)}%`;
 
     if(loaded >= 5 && !started){
         started = true;
         document.body.classList.remove('loading');
         captionEl.innerHTML = "";
+        slides[0].style.display = "block";
     }
 }
 
-let current = 0;
 function nextSlide(){
     slides[current].classList.remove('active');
+    slides[current].style.display = "none";
     current = (current + 1) % slides.length;
     slides[current].classList.add('active');
+    slides[current].style.display = "block";
 }
 
 document.body.addEventListener('click', nextSlide);
