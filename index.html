@@ -5,98 +5,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ID-LAB NYC</title>
 
+<!-- Preload first image + logo so site never starts blank -->
 <link rel="preload" href="Images/01.jpg" as="image">
 <link rel="preload" href="logo.png" as="image">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#000;overflow:hidden;font-family:Helvetica,Arial,sans-serif;position:relative;cursor:pointer;} /* cursor shows clickable */
 
-body{
-    background:#000;
-    overflow:hidden;
-    font-family:Helvetica,Arial,sans-serif;
-    position:relative;
-    cursor:pointer;
-}
+    .slide{
+        position:fixed;top:0;left:0;width:100vw;height:100vh;
+        opacity:1;transition:opacity 0.35s ease;z-index:1;
+        background:#000; /* Pure black background */
+    }
+    .slide img{
+        width:100%;height:100%;object-fit:cover;
+        opacity:0; /* Hide image until ready */
+        transition:opacity 0.6s ease;
+        position:absolute;top:0;left:0;
+    }
+    .slide.active img.loaded{
+        opacity:1; /* Show image only when active AND loaded */
+    }
+    .slide:not(.active) img{loading:lazy;}
 
-/* SLIDES — NORMAL STATE */
-.slide{
-    position:fixed;
-    top:0;left:0;
-    width:100vw;height:100vh;
-    z-index:1;
-    background:#000;
-    display:block;
-}
-.slide img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-.slide:not(.active){
-    display:none;
-}
+    .top-bar,.caption-bar{
+        position:fixed;left:0;width:100%;background:#000;z-index:30;height:36px;
+        display:flex;align-items:center;justify-content:center;transition:all .3s;
+    }
+    .top-bar{top:0;}
+    .caption-bar{bottom:0;align-items:flex-start;padding-top:8px;}
 
-/* HARD BLOCK SLIDES DURING LOADING */
-body.loading .slide{
-    display:none !important;
-}
+    .top-text,.caption{
+        color:#fff;font-size:8px;letter-spacing:1.2px;text-transform:uppercase;
+        text-align:center;line-height:1.4;transition:all .3s;
+    }
+    .top-bar.hit,.caption-bar.hit{background:#fff;}
+    .top-bar.hit .top-text,.caption-bar.hit .caption{color:#000;}
 
-/* UI */
-.top-bar,.caption-bar{
-    position:fixed;
-    left:0;
-    width:100%;
-    background:#000;
-    z-index:30;
-    height:36px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-.top-bar{top:0;}
-.caption-bar{bottom:0;align-items:flex-start;padding-top:8px;}
+    .logo{
+        position:fixed;width:60px;height:auto;z-index:40;
+        user-select:none;pointer-events:none; /* logo itself not clickable */
+        filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));
+    }
 
-.top-text,.caption{
-    color:#fff;
-    font-size:8px;
-    letter-spacing:1.2px;
-    text-transform:uppercase;
-    text-align:center;
-    line-height:1.4;
-}
-
-.logo{
-    position:fixed;
-    width:60px;
-    z-index:40;
-    user-select:none;
-    pointer-events:none;
-    filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));
-}
-
-.contact-btn{
-    position:fixed;
-    top:50%;left:50%;
-    transform:translate(-50%,-50%);
-    z-index:40;
-    color:white;
-    text-decoration:none;
-    text-transform:uppercase;
-    font-size:10px;
-    font-weight:bold;
-    letter-spacing:1.4px;
-    border:1px solid white;
-    padding:5px 12px;
-}
-.contact-btn:hover{background:white;color:black;}
+    .contact-btn{
+        position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+        z-index:40;color:white;text-decoration:none;text-transform:uppercase;
+        font-size:10px;font-weight:bold;letter-spacing:1.4px;
+        border:1px solid white;padding:5px 12px;transition:all .25s;
+    }
+    .contact-btn:hover,.contact-btn.hit{background:white;color:black;}
 </style>
 </head>
+<body>
 
-<body class="loading">
-
-<!-- SLIDES -->
-<div class="slide active"><img src="Images/01.jpg"></div>
+<!-- All slides (first one starts active so we never see blank) -->
+<div class="slide"><img src="Images/01.jpg"></div>
 <div class="slide"><img src="Images/02.jpg"></div>
 <div class="slide"><img src="Images/03.jpg"></div>
 <div class="slide"><img src="Images/04.jpg"></div>
@@ -120,60 +85,180 @@ body.loading .slide{
 <div class="slide"><img src="Images/21.jpg"></div>
 <div class="slide"><img src="Images/22.jpg"></div>
 
-<div class="top-bar">
-  <div class="top-text">
-    ID-LAB IS AN ARCHITECTURE AND INTERIOR DESIGN PRACTICE<br>
-    BASED IN NYC, DEDICATED TO IDENTITY-DRIVEN DESIGN
-  </div>
-</div>
+<div class="top-bar"><div class="top-text">ID-LAB IS AN ARCHITECTURE AND INTERIOR DESIGN PRACTICE<br>BASED IN NYC, DEDICATED TO IDENTITY-DRIVEN DESIGN</div></div>
 
-<img class="logo" src="logo.png">
+<img class="logo" id="logo" src="logo.png" alt="ID-LAB NYC">
+
 <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
 
-<div class="caption-bar">
-  <div class="caption" id="caption">Loading slideshow – 0%</div>
-</div>
+<div class="caption-bar"><div class="caption" id="caption"></div></div>
 
 <script>
-const slides = Array.from(document.querySelectorAll('.slide'));
-const images = slides.map(s => s.querySelector('img'));
+const captions = { 
+    "01.jpg": "OMA · Louis Vuitton Visionary Journeys – Origins<br>Osaka · 2025",
+    "02.jpg": "OMA · Louis Vuitton Visionary Journeys – Monogram<br>Osaka · 2025",
+    "03.jpg": "OMA · Louis Vuitton Visionary Journeys – Trunkscape<br>Bangkok · 2024",
+    "04.jpg": "OMA · Louis Vuitton Visionary Journeys – Giveaway<br>Bangkok · 2024",
+    "05.jpg": "OMA · Louis Vuitton Visionary Journeys – Sport<br>Shanghai · 2025",
+    "06.jpg": "OMA · Louis Vuitton Visionary Journeys – Fashion Icons<br>Shanghai · 2025",
+    "06-B.jpg": "OMA · Louis Vuitton Visionary Journeys – LV & Japan<br>Osaka · 2025",
+    "07.jpg": "OMA · Louis Vuitton Visionary Journeys – Music<br>Seoul · 2025",
+    "08.jpg": "Anastasio Architects & Stefano Pasqualetti Design<br>The Boston Consulting Group (BCG) · Miami · 2020",
+    "09.jpg": "Anastasio Architects & Stefano Pasqualetti Design<br>The Boston Consulting Group (BCG) · Miami · 2020",
+    "10.jpg": "Anastasio Architects & Stefano Pasqualetti Design<br>The Boston Consulting Group (BCG) · Miami · 2020",
+    "11.jpg": "Anastasio Architects · A. Pasta Bar<br>interior design by Alessandro Pasquale Studio · New York · 2017",
+    "12.jpg": "Anastasio Architects · A. Pasta Bar<br>interior design by Alessandro Pasquale Studio · New York · 2017",
+    "13.jpg": "AR Architecture · Dear Irving on Hudson<br>interior design by Delphine Mauroit · New York · 2018",
+    "14.jpg": "AR Architecture · Dear Irving on Hudson<br>interior design by Delphine Mauroit · New York · 2018",
+    "15.jpg": "Anastasio Architects · Giada Flagship<br>concept by Claudio Silvestrin · Boston · 2019",
+    "16.jpg": "Anastasio Architects · Giada Flagship<br>concept by Claudio Silvestrin · Boston · 2019",
+    "17.jpg": "Anastasio Architects · Golden Goose<br>Chicago · 2019",
+    "18.jpg": "Anastasio Architects · Golden Goose<br>Boston · 2020",
+    "19.jpg": "OMA · Louis Vuitton Visionary Journeys – Trunkscape<br>Osaka · 2025",
+    "20.jpg": "OMA · Louis Vuitton Visionary Journeys – LV & Japan<br>Osaka · 2025",
+    "21.jpg": "OMA · Louis Vuitton Visionary Journeys – Atelier<br>Osaka · 2025",
+    "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials<br>Osaka · 2025"
+};
+
+const slides = document.querySelectorAll('.slide');
+const logo = document.getElementById('logo');
 const captionEl = document.getElementById('caption');
+const topBar = document.querySelector('.top-bar');
+const bottomBar = document.querySelector('.caption-bar');
+const contactBtn = document.querySelector('.contact-btn');
 
-let loaded = 0;
-let current = 0;
-let started = false;
+const logoSize = 60;
+const topH = 36, bottomH = 36;
 
-images.forEach(img=>{
-    if(img.complete && img.naturalHeight){
-        onLoad();
-    }else{
-        img.addEventListener('load', onLoad);
-        img.addEventListener('error', onLoad);
+let x = Math.random() * (innerWidth - logoSize);
+let y = topH + Math.random() * (innerHeight - topH - bottomH - logoSize);
+
+const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || innerWidth <= 1024;
+const speed = isMobile ? 3.2 : 5.8;
+let dx = (Math.random() > 0.5 ? speed : -speed);
+let dy = (Math.random() > 0.5 ? speed : -speed);
+
+let list = Array.from(slides);
+let currentIndex = 0;
+
+const allImages = Array.from(slides).map(slide => slide.querySelector('img'));
+// Mark preloaded images as loaded if already complete
+allImages.forEach(img => {
+    if (img.complete && img.naturalHeight !== 0) {
+        img.classList.add('loaded');
     }
 });
 
-function onLoad(){
-    loaded++;
-    captionEl.innerHTML = `Loading slideshow – ${Math.round(loaded/images.length*100)}%`;
+const totalImages = allImages.length;
+let loadedImages = 0;
+let autoPlayEnabled = false;
 
-    if(loaded >= 5 && !started){
-        started = true;
-        document.body.classList.remove('loading');
-        captionEl.innerHTML = "";
-        slides[0].style.display = "block";
+captionEl.innerHTML = "Loading slideshow – 0%";
+
+// Mark slides as loaded
+allImages.forEach((img, idx) => {
+    if (img.complete && img.naturalHeight !== 0) {
+        incrementLoaded();
+    } else {
+        img.addEventListener('load', () => {
+            img.classList.add('loaded');
+            incrementLoaded();
+        });
+        img.addEventListener('error', () => {
+            img.classList.add('loaded');
+            incrementLoaded();
+        });
+    }
+});
+
+function incrementLoaded() {
+    loadedImages++;
+    const percent = Math.round((loadedImages / totalImages) * 100);
+    captionEl.innerHTML = `Loading slideshow – ${percent}%`;
+
+    if (loadedImages >= 5 && !autoPlayEnabled) {
+        autoPlayEnabled = true;
+        // Start the show: make current (first) slide active and show its image
+        list[currentIndex].classList.add('active');
+        list[currentIndex].querySelector('img').classList.add('loaded');
+        updateCaption();
+    }
+
+    if (loadedImages === totalImages) {
+        // Full random shuffle when everything is loaded
+        for (let i = list.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [list[i], list[j]] = [list[j], list[i]];
+        }
+        list[currentIndex].classList.remove('active');
+        currentIndex = 0;
+        list[currentIndex].classList.add('active');
+        list[currentIndex].querySelector('img').classList.add('loaded');
+        updateCaption();
     }
 }
 
-function nextSlide(){
-    slides[current].classList.remove('active');
-    slides[current].style.display = "none";
-    current = (current + 1) % slides.length;
-    slides[current].classList.add('active');
-    slides[current].style.display = "block";
+function updateCaption() {
+    const file = list[currentIndex].querySelector('img').src.split('/').pop();
+    const key = file.replace(/-B\.jpg/gi, '.jpg');
+    captionEl.innerHTML = captions[key] || "";
 }
 
-document.body.addEventListener('click', nextSlide);
-</script>
+function nextSlide(auto = false) {
+    let nextIndex = currentIndex;
+    let steps = 0;
 
+    do {
+        nextIndex = (nextIndex + 1) % list.length;
+        steps++;
+        if (steps >= list.length) return; // safety
+    } while (auto && !list[nextIndex].querySelector('img').classList.contains('loaded'));
+
+    list[currentIndex].classList.remove('active');
+    currentIndex = nextIndex;
+    list[currentIndex].classList.add('active');
+    updateCaption();
+}
+
+// Manual click: always next, no skip
+document.body.addEventListener('click', function(e) {
+    if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
+    nextSlide(false);
+});
+document.body.addEventListener('touchstart', function(e) {
+    if (e.target.closest('.contact-btn') || e.target.closest('.top-bar') || e.target.closest('.caption-bar')) return;
+    e.preventDefault();
+    nextSlide(false);
+});
+
+function animate() {
+    x += dx; y += dy;
+    let hit = false;
+
+    if (y <= topH) { y = topH; dy = -dy; hit = true; topBar.classList.add('hit'); setTimeout(() => topBar.classList.remove('hit'), 300); }
+    if (y >= innerHeight - bottomH - logoSize) { y = innerHeight - bottomH - logoSize; dy = -dy; hit = true; bottomBar.classList.add('hit'); setTimeout(() => bottomBar.classList.remove('hit'), 300); }
+    if (x <= 0 || x >= innerWidth - logoSize) { dx = -dx; hit = true; }
+
+    const r = contactBtn.getBoundingClientRect();
+    if (x + logoSize > r.left && x < r.right && y + logoSize > r.top && y < r.bottom) {
+        contactBtn.classList.add('hit');
+        setTimeout(() => contactBtn.classList.remove('hit'), 300);
+    }
+
+    if (hit && autoPlayEnabled) {
+        nextSlide(true);
+    }
+
+    logo.style.transform = `translate(${x}px, ${y}px)`;
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+    x = Math.max(0, Math.min(x, innerWidth - logoSize));
+    y = Math.max(topH, Math.min(y, innerHeight - topH - bottomH - logoSize));
+});
+</script>
 </body>
 </html>
