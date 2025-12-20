@@ -127,7 +127,7 @@ let x = Math.random() * (innerWidth - logoSize);
 let y = topH + Math.random() * (innerHeight - topH - bottomH - logoSize);
 
 const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || innerWidth <= 1024;
-const speed = isMobile ? 4.2 : 7.8;
+const speed = isMobile ? 3.2 : 7.8;
 let dx = (Math.random() > 0.5 ? speed : -speed);
 let dy = (Math.random() > 0.5 ? speed : -speed);
 
