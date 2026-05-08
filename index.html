@@ -5,28 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ID-LAB NYC</title>
 
-<link rel="preload" href="Images/01.jpg" as="image">
-<link rel="preload" href="logo.png" as="image">
-
 <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body{
         background:#000;
+        color:#fff;
         overflow:hidden;
         font-family:Helvetica,Arial,sans-serif;
-        position:relative;
-        cursor:pointer;
         height:100vh;
+        cursor:pointer;
     }
 
-    .slide{
+    /* Top Square Slideshow */
+    .top-square{
         position:fixed;
         top:0; left:0;
-        width:100vw; height:100vh;
-        opacity:0;
-        transition:opacity 0.4s ease;
+        width:100vw;
+        height:50vh;
         z-index:1;
-        background:#000;
+    }
+    .slide{
+        position:absolute;
+        top:0; left:0;
+        width:100%; height:100%;
+        opacity:0;
+        transition:opacity 0.5s ease;
     }
     .slide img{
         width:100%; height:100%;
@@ -34,176 +37,142 @@
     }
     .slide.active{opacity:1;}
 
-    /* Top and Bottom Bars */
-    .top-bar,.caption-bar{
-        position:fixed;
-        left:0; width:100%;
-        background:#000;
-        z-index:30;
-        height:36px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        transition:all .3s;
-    }
-    .top-bar{top:0;}
-    .caption-bar{bottom:0; align-items:flex-start; padding-top:8px;}
-
-    .top-text,.caption{
-        color:#fff;
-        font-size:8px;
-        letter-spacing:1.2px;
-        text-transform:uppercase;
-        text-align:center;
-        line-height:1.4;
-    }
-    .top-bar.hit,.caption-bar.hit{background:#fff;}
-    .top-bar.hit .top-text,.caption-bar.hit .caption{color:#000;}
-
-    /* Static Logo at Bottom */
     .logo{
-        position:fixed;
-        bottom:50px;
-        left:50%;
-        transform:translateX(-50%);
-        width:70px;
+        position:absolute;
+        top:50%; left:50%;
+        transform:translate(-50%, -50%);
+        width:90px;
         height:auto;
-        z-index:40;
-        filter:drop-shadow(0 0 12px rgba(255,255,255,0.7));
-        pointer-events:none;
+        z-index:10;
+        filter:drop-shadow(0 0 15px rgba(255,255,255,0.9));
+    }
+
+    /* Bottom Square Text */
+    .bottom-square{
+        position:fixed;
+        bottom:0; left:0;
+        width:100vw;
+        height:50vh;
+        z-index:20;
+        display:flex;
+        align-items:flex-start;
+        justify-content:center;
+        padding:50px 8% 80px;
+        background:rgba(0,0,0,0.75);
+        text-align:left;
+        overflow-y:auto;
+    }
+
+    .splash-text{
+        max-width:100%;
+        line-height:1.35;
+    }
+
+    .splash-text p{
+        font-size: clamp(13.8px, 2.75vw, 17.8px);
+        font-weight:700;
+        margin-bottom:1rem;
+        text-transform:uppercase;
     }
 
     /* Contact Button */
     .contact-btn{
         position:fixed;
-        top:50%; left:50%;
-        transform:translate(-50%,-50%);
-        z-index:40;
-        color:white;
+        bottom:28px;
+        left:8%;
+        z-index:30;
+        color:#000;
+        background:#fff;
         text-decoration:none;
         text-transform:uppercase;
-        font-size:10px;
+        font-size:11px;
         font-weight:bold;
-        letter-spacing:1.4px;
-        border:1px solid white;
-        padding:6px 16px;
-        transition:all .25s;
-    }
-    .contact-btn:hover,.contact-btn.hit{
-        background:white;
-        color:black;
+        letter-spacing:2.2px;
+        border:2px solid #fff;
+        padding:9px 26px;
     }
 
-    /* SPLASH TEXT - Large & Bold */
-    .splash-overlay{
-        position:fixed;
-        top:0; left:0;
-        width:100vw; height:100vh;
-        z-index:20;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        padding:5% 8%;
-        text-align:center;
-        background:rgba(0,0,0,0.55);
-        pointer-events:none;
+    /* Color Inversion */
+    body.inverted{
+        background:#fff;
+        color:#000;
     }
-
-    .splash-text{
-        color:white;
-        max-width:1100px;
-        line-height:1.25;
+    body.inverted .bottom-square{
+        background:rgba(255,255,255,0.9);
     }
-
-    .splash-text p{
-        font-size: clamp(22px, 4.5vw, 42px);
-        font-weight:300;
-        margin-bottom:1.8rem;
+    body.inverted .contact-btn{
+        color:#fff;
+        background:#000;
+        border-color:#000;
     }
-
-    .splash-text .bold{
-        font-weight:700;
-    }
-
-    .splash-signature{
-        margin-top:3.5rem;
-        font-size: clamp(18px, 3vw, 24px);
-        letter-spacing:4px;
-        text-transform:uppercase;
-    }
-
-    .splash-signature .email{
-        display:block;
-        margin-top:12px;
-        font-size:16px;
-        letter-spacing:2px;
-        opacity:0.85;
-    }
-
-    @media (max-width: 768px) {
-        .splash-text p { margin-bottom:1.4rem; }
+    body.inverted .logo{
+        filter:drop-shadow(0 0 15px rgba(0,0,0,0.8));
     }
 </style>
 </head>
 <body>
 
-<!-- Slideshow -->
-<div class="slide active"><img src="Images/01.jpg"></div>
-<div class="slide"><img src="Images/02.jpg"></div>
-<div class="slide"><img src="Images/03.jpg"></div>
-<div class="slide"><img src="Images/04.jpg"></div>
-<div class="slide"><img src="Images/05.jpg"></div>
-<div class="slide"><img src="Images/06.jpg"></div>
-<div class="slide"><img src="Images/06-B.jpg"></div>
-<div class="slide"><img src="Images/07.jpg"></div>
-<div class="slide"><img src="Images/08.jpg"></div>
-<div class="slide"><img src="Images/09.jpg"></div>
-<div class="slide"><img src="Images/10.jpg"></div>
-<div class="slide"><img src="Images/11.jpg"></div>
-<div class="slide"><img src="Images/12.jpg"></div>
-<div class="slide"><img src="Images/13.jpg"></div>
-<div class="slide"><img src="Images/14.jpg"></div>
-<div class="slide"><img src="Images/15.jpg"></div>
-<div class="slide"><img src="Images/16.jpg"></div>
-<div class="slide"><img src="Images/17.jpg"></div>
-<div class="slide"><img src="Images/18.jpg"></div>
-<div class="slide"><img src="Images/19.jpg"></div>
-<div class="slide"><img src="Images/20.jpg"></div>
-<div class="slide"><img src="Images/21.jpg"></div>
-<div class="slide"><img src="Images/22.jpg"></div>
-
-<div class="top-bar">
-    <div class="top-text">ID-LAB IS AN ARCHITECTURE AND INTERIOR DESIGN PRACTICE<br>BASED IN NYC, DEDICATED TO IDENTITY-DRIVEN DESIGN</div>
+<!-- Top Square - All your original images -->
+<div class="top-square">
+    <div class="slide active"><img src="Images/01.jpg"></div>
+    <div class="slide"><img src="Images/02.jpg"></div>
+    <div class="slide"><img src="Images/03.jpg"></div>
+    <div class="slide"><img src="Images/04.jpg"></div>
+    <div class="slide"><img src="Images/05.jpg"></div>
+    <div class="slide"><img src="Images/06.jpg"></div>
+    <div class="slide"><img src="Images/06-B.jpg"></div>
+    <div class="slide"><img src="Images/07.jpg"></div>
+    <div class="slide"><img src="Images/08.jpg"></div>
+    <div class="slide"><img src="Images/09.jpg"></div>
+    <div class="slide"><img src="Images/10.jpg"></div>
+    <div class="slide"><img src="Images/11.jpg"></div>
+    <div class="slide"><img src="Images/12.jpg"></div>
+    <div class="slide"><img src="Images/13.jpg"></div>
+    <div class="slide"><img src="Images/14.jpg"></div>
+    <div class="slide"><img src="Images/15.jpg"></div>
+    <div class="slide"><img src="Images/16.jpg"></div>
+    <div class="slide"><img src="Images/17.jpg"></div>
+    <div class="slide"><img src="Images/18.jpg"></div>
+    <div class="slide"><img src="Images/19.jpg"></div>
+    <div class="slide"><img src="Images/20.jpg"></div>
+    <div class="slide"><img src="Images/21.jpg"></div>
+    <div class="slide"><img src="Images/22.jpg"></div>
+    <img class="logo" src="logo.png" alt="ID-LAB NYC">
 </div>
 
-<img class="logo" id="logo" src="logo.png" alt="ID-LAB NYC">
-
-<a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
-
-<div class="caption-bar"><div class="caption" id="caption"></div></div>
-
-<!-- Splash Text -->
-<div class="splash-overlay">
+<!-- Bottom Square Text -->
+<div class="bottom-square">
     <div class="splash-text">
-        <p>Imagine stepping inside a place and immediately understanding what it stands for.<br>
-        Not because someone told you, but because material, shape, light, rhythm,<br>every detail all speak the same coherent language.</p>
-        
-        <p class="bold">That’s what we build.</p>
-        
+        <p>Imagine stepping inside a place and immediately understanding what it stands for.</p>
+        <p>Not because someone told you, but because material, shape, light, rhythm, every detail all speak the same coherent language.</p>
+        <p>That’s what we build.</p>
         <p>We are an identity laboratory that translates your core values into physical spaces that tell your unique story and actively communicate it with precision and emotional depth.</p>
-        
         <p>If your project is driven by something you deeply care about, we should talk.</p>
-        
-        <div class="splash-signature">
-            ID-LAB<br>
-            New York<br>
-            <span class="email">info@id-lab.nyc</span>
-        </div>
     </div>
 </div>
 
+<a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
+
 <script>
-const captions = { 
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+let isInverted = false;
+
+document.body.addEventListener('click', function(e) {
+    if (e.target.closest('.contact-btn')) return;
+
+    isInverted = !isInverted;
+    document.body.classList.toggle('inverted', isInverted);
+
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+});
+</script>
+</body>
+</html>
+
+const captions =  
     "01.jpg": "OMA · Louis Vuitton Visionary Journeys – Origins<br>Osaka · 2025",
     "02.jpg": "OMA · Louis Vuitton Visionary Journeys – Monogram<br>Osaka · 2025",
     "03.jpg": "OMA · Louis Vuitton Visionary Journeys – Trunkscape<br>Bangkok · 2024",
@@ -226,43 +195,5 @@ const captions = {
     "19.jpg": "OMA · Louis Vuitton Visionary Journeys – Trunkscape<br>Osaka · 2025",
     "20.jpg": "OMA · Louis Vuitton Visionary Journeys – LV & Japan<br>Osaka · 2025",
     "21.jpg": "OMA · Louis Vuitton Visionary Journeys – Atelier<br>Osaka · 2025",
-    "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials<br>Osaka · 2025"
-};
+    "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials<br>Osaka · 
 
-const slides = document.querySelectorAll('.slide');
-const captionEl = document.getElementById('caption');
-let currentIndex = 0;
-
-slides[currentIndex].classList.add('active');
-captionEl.innerHTML = captions["01.jpg"] || "";
-
-function nextSlide() {
-    slides[currentIndex].classList.remove('active');
-    currentIndex = (currentIndex + 1) % slides.length;
-    slides[currentIndex].classList.add('active');
-    
-    const file = slides[currentIndex].querySelector('img').src.split('/').pop();
-    const key = file.replace(/-B\.jpg/gi, '.jpg');
-    captionEl.innerHTML = captions[key] || "";
-}
-
-// Click anywhere to advance (except protected areas)
-document.body.addEventListener('click', function(e) {
-    if (e.target.closest('.contact-btn') || 
-        e.target.closest('.top-bar') || 
-        e.target.closest('.caption-bar') || 
-        e.target.closest('.splash-overlay')) return;
-    nextSlide();
-});
-
-document.body.addEventListener('touchstart', function(e) {
-    if (e.target.closest('.contact-btn') || 
-        e.target.closest('.top-bar') || 
-        e.target.closest('.caption-bar') || 
-        e.target.closest('.splash-overlay')) return;
-    e.preventDefault();
-    nextSlide();
-});
-</script>
-</body>
-</html>
