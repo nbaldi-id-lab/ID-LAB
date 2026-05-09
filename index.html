@@ -13,10 +13,8 @@
         background: #fff;
         font-size: clamp(12px, 2.75vw, 12.8px);
         font-weight:700;
-       margin-bottom:1rem;
+        margin-bottom:1rem;
         text-transform: uppercase;
-        
-
     }
     .container{
         max-width: 720px;
@@ -24,7 +22,6 @@
         padding: 0 28px 100px;
     }
 
-    /* Hero with logo only */
     .hero{
         height:100vh;
         background:#000;
@@ -37,12 +34,23 @@
         height:auto;
     }
 
+    /* More space at the beginning of the text */
+    .intro-text {
+        padding-top: 90px;
+    }
+
+    /* === STRONG LANDSCAPE SLIDESHOWS === */
     .slideshow{
         position:relative;
         width:100%;
-        height:520px;
+        max-width:100%;
+        aspect-ratio: 16 / 9;           /* Forces landscape */
+        height: auto !important;        /* Responsive but locked ratio */
+        min-height: 380px;              /* Minimum landscape height */
         margin: 55px 0;
         background:#000;
+        overflow: hidden;
+        border-radius: 2px;
     }
     .slide{
         position:absolute;
@@ -53,8 +61,10 @@
     }
     .slide.active{opacity:1;}
     .slide img{
-        width:100%; height:100%;
-        object-fit:cover;   /* Landscape */
+        width:100% !important;
+        height:100% !important;
+        object-fit: cover !important;     /* Crop to landscape */
+        object-position: center;
     }
     .caption{
         position:absolute;
@@ -64,7 +74,7 @@
         padding:16px 25px;
         font-size:15px;
         line-height:1.45;
-        text-transform: none;   /* Reverted caption style */
+        text-transform: none;
         letter-spacing: normal;
         font-weight: normal;
     }
@@ -105,21 +115,12 @@
 
 <div class="container">
 
-    <p>Imagine stepping inside a place and immediately understanding what it stands for. Not because someone told you, but because material, shape, light, rhythm, every detail all speak the same coherent language.</p>
+    <div class="intro-text">
+        <p>Imagine stepping inside a place and immediately understanding what it stands for. Not because someone told you, but because material, shape, light, rhythm, every detail all speak the same coherent language.</p>
+        <p>That’s what we build.</p>
+    </div>
 
-    <p>That’s what we build.</p>
-
-    <p>We are an identity laboratory that translates your core values into physical environments that feel meaningful, precise, and emotionally connected.</p>
-
-    <p>Identity is not a logo.
-       Identity is not a website.
-       Identity is not a marketing campaign.</p>
-
-    <p>Identity is what remains when everything superficial is stripped away.</p>
-
-    <p>It is your purpose, the convictions that guide every decision, the reason the organization exists, and the impression you want to leave in those who experience your space.</p>
-
-    <!-- OMA Osaka -->
+    <!-- First slideshow right after “That’s what we build.” -->
     <div class="slideshow" id="oma1">
         <div class="slide active"><img src="Images/01.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div></div>
         <div class="slide"><img src="Images/02.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Monogram, Osaka 2025</div></div>
@@ -130,11 +131,17 @@
         <div class="slide"><img src="Images/22.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Materials, Osaka 2025</div></div>
     </div>
 
-    <p>Most architects treat identity as an afterthought, while branding treats space as background. We believe the opposite. A space becomes truly powerful when it becomes the physical continuation of who you are.</p>
+    <p>We are an identity laboratory that translates your core values into physical environments that feel meaningful, precise, and emotionally connected.</p>
 
-    <p>Space is the strongest medium for expressing and impressing a message of identity. Architecture is space identity.</p>
+    <p>Identity is not a logo.<br>
+       Identity is not a website.<br>
+       Identity is not a marketing campaign.</p>
 
-    <!-- misc + Retail -->
+    <p>Identity is what remains when everything superficial is stripped away.</p>
+
+    <p>It is your purpose, the convictions that guide every decision, the reason the organization exists, and the impression you want to leave in those who experience your space.</p>
+
+    <!-- Retail slideshow -->
     <div class="slideshow" id="retail">
         <div class="slide active"><img src="Images/08.jpg"><div class="caption">The Boston Consulting Group, Miami</div></div>
         <div class="slide"><img src="Images/09.jpg"><div class="caption">The Boston Consulting Group, Miami</div></div>
@@ -144,11 +151,22 @@
         <div class="slide"><img src="Images/18.jpg"><div class="caption">Golden Goose, Boston</div></div>
     </div>
 
+    <p>Most architects treat identity as an afterthought, while branding treats space as background. We believe the opposite. A space becomes truly powerful when it becomes the physical continuation of who you are.</p>
+
+    <p>Space is the strongest medium for expressing and impressing a message of identity. Architecture is space identity.</p>
+
     <p>Our process is deliberate and disciplined. We develop a set of guiding principles that establish a direct link between identity and experiential outcomes. Every design choice, program layout, material selection, lighting effect, acoustic atmosphere, scent, temperature is evaluated against this narrative.</p>
 
     <p>Architecture is not merely the sum of circulation, lighting, or finishes. It is the deliberate sequence of perceptions, emotions, and interactions that allows someone to enter, inhabit, and internalize a vision.</p>
 
-    <!-- Final big OMA slideshow at the very end -->
+    <div class="signature">
+        ID-LAB<br>
+        New York
+    </div>
+
+    <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
+
+    <!-- Last slideshow after contact button -->
     <div class="slideshow" id="finaloma">
         <div class="slide active"><img src="Images/01.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys, Osaka</div></div>
         <div class="slide"><img src="Images/02.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys, Osaka</div></div>
@@ -158,13 +176,6 @@
         <div class="slide"><img src="Images/06.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys, Shanghai</div></div>
         <div class="slide"><img src="Images/07.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys, Seoul</div></div>
     </div>
-
-    <div class="signature">
-        ID-LAB<br>
-        New York
-    </div>
-
-    <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
 
 </div>
 
@@ -186,5 +197,3 @@ initSlideshow('finaloma');
 
 </body>
 </html>
-
-
