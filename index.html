@@ -8,11 +8,11 @@
     *{margin:0;padding:0;box-sizing:border-box;}
     body{
         font-family: Helvetica, Arial, sans-serif;
-        line-height: 1.55;              /* compact spacing */
+        line-height: 1;
         color: #fff;
         background: #000;
         font-size: 18px;
-        font-weight:700;
+        font-weight: 400;
         text-transform: uppercase;
     }
     .container{
@@ -21,7 +21,6 @@
         padding: 0 28px 80px;
     }
 
-    /* Smaller Hero - 1/3 screen */
     .hero{
         height:33vh;
         background:#000;
@@ -30,50 +29,48 @@
         justify-content:center;
     }
     .logo{
-        width: 80px;                    /* Smaller logo */
+        width: 80px;
         height:auto;
     }
 
-    /* Intro spacing */
     .intro-text {
         padding-top: 70px;
     }
 
-    /* Strong Landscape Slideshows */
+    /* Slideshow Container */
     .slideshow{
-        position:relative;
-        width:100%;
-        aspect-ratio: 16 / 9;
-        height: auto !important;
-        min-height: 380px;
-        margin: 60px 0 35px;
-        background:#000;
-        overflow: hidden;
+        position: relative;
+        width: 100%;
+        margin: 60px 0 12px;
+        background: #000;
+        min-height: 400px;           /* Important: gives space for images */
     }
     .slide{
-        position:absolute;
-        top:0; left:0;
-        width:100%; height:100%;
-        opacity:0;
-        transition:opacity 0.7s ease;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        opacity: 0;
+        transition: opacity 0.7s ease;
     }
-    .slide.active{opacity:1;}
+    .slide.active{
+        opacity: 1;
+    }
     .slide img{
-        width:100% !important;
-        height:100% !important;
-        object-fit: cover !important;
-        object-position: center;
+        width: 100%;
+        height: auto;
+        display: block;
     }
 
-    /* Captions BELOW image - 9px */
-    .caption{
-        margin-top: 14px;
-        color:#aaa;
+    /* Caption directly below */
+    .slideshow-caption {
+        color:#ccc;
         font-size: 9px;
         line-height: 1.4;
-        font-weight: normal;
+        text-align: center;
         text-transform: none;
-        letter-spacing: normal;
+        margin-top: 14px;
+        min-height: 28px;
     }
 
     p{
@@ -103,7 +100,6 @@
 </head>
 <body>
 
-<!-- Smaller Hero -->
 <div class="hero">
     <img class="logo" src="logo.png" alt="ID-LAB NYC">
 </div>
@@ -115,16 +111,17 @@
         <p>That’s what we build.</p>
     </div>
 
-    <!-- First slideshow right after “That’s what we build.” -->
+    <!-- First Slideshow -->
     <div class="slideshow" id="oma1">
-        <div class="slide active"><img src="Images/01.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div></div>
-        <div class="slide"><img src="Images/02.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Monogram, Osaka 2025</div></div>
-        <div class="slide"><img src="Images/06-B.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – LV & Japan, Osaka 2025</div></div>
-        <div class="slide"><img src="Images/19.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Trunkscape, Osaka 2025</div></div>
-        <div class="slide"><img src="Images/20.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – LV & Japan, Osaka 2025</div></div>
-        <div class="slide"><img src="Images/21.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Atelier, Osaka 2025</div></div>
-        <div class="slide"><img src="Images/22.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Materials, Osaka 2025</div></div>
+        <div class="slide active"><img src="Images/01.jpg"></div>
+        <div class="slide"><img src="Images/02.jpg"></div>
+        <div class="slide"><img src="Images/06-B.jpg"></div>
+        <div class="slide"><img src="Images/19.jpg"></div>
+        <div class="slide"><img src="Images/20.jpg"></div>
+        <div class="slide"><img src="Images/21.jpg"></div>
+        <div class="slide"><img src="Images/22.jpg"></div>
     </div>
+    <div class="slideshow-caption" id="caption-oma1">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div>
 
     <p>We are an identity laboratory that translates your core values into physical environments that feel meaningful, precise, and emotionally connected.</p>
 
@@ -136,23 +133,24 @@
 
     <p>It is your purpose, the convictions that guide every decision, the reason the organization exists, and the impression you want to leave in those who experience your space.</p>
 
-    <!-- Retail slideshow -->
+    <!-- Retail Slideshow -->
     <div class="slideshow" id="retail">
-        <div class="slide active"><img src="Images/08.jpg"><div class="caption">The Boston Consulting Group, Miami</div></div>
-        <div class="slide"><img src="Images/09.jpg"><div class="caption">The Boston Consulting Group, Miami</div></div>
-        <div class="slide"><img src="Images/10.jpg"><div class="caption">The Boston Consulting Group, Miami</div></div>
-        <div class="slide"><img src="Images/15.jpg"><div class="caption">Giada Flagship, Boston</div></div>
-        <div class="slide"><img src="Images/17.jpg"><div class="caption">Golden Goose, Chicago</div></div>
-        <div class="slide"><img src="Images/18.jpg"><div class="caption">Golden Goose, Boston</div></div>
+        <div class="slide active"><img src="Images/08.jpg"></div>
+        <div class="slide"><img src="Images/09.jpg"></div>
+        <div class="slide"><img src="Images/10.jpg"></div>
+        <div class="slide"><img src="Images/15.jpg"></div>
+        <div class="slide"><img src="Images/17.jpg"></div>
+        <div class="slide"><img src="Images/18.jpg"></div>
     </div>
+    <div class="slideshow-caption" id="caption-retail">The Boston Consulting Group, Miami</div>
 
     <p>Most architects treat identity as an afterthought, while branding treats space as background. We believe the opposite. A space becomes truly powerful when it becomes the physical continuation of who you are.</p>
 
-    <p>Space is the strongest medium for expressing and impressing a message of identity. Architecture is space identity.</p>
+    <p>IT IS THE STRONGEST MEDIUM FOR EXPRESSING AND IMPRESSING A MESSAGE OF IDENTITY.</p>
 
-    <p>Our process is deliberate and disciplined. We develop a set of guiding principles that establish a direct link between identity and experiential outcomes. Every design choice, program layout, material selection, lighting effect, acoustic atmosphere, scent, temperature is evaluated against this narrative.</p>
+    <p>ARCHITECTURE IS NOT JUST THE SUM OF FUNCTION, FORM, OR MATERIAL. IT IS THE DELIBERATE SEQUENCE OF PERCEPTIONS, EMOTIONS, AND INTERACTIONS THAT ALLOWS SOMEONE TO ENTER, INHABIT, AND INTERNALIZE A VISION.</p>
 
-    <p>Architecture is not merely the sum of circulation, lighting, or finishes. It is the deliberate sequence of perceptions, emotions, and interactions that allows someone to enter, inhabit, and internalize a vision.</p>
+    <p>ARCHITECTURE IS IDENTITY.</p>
 
     <div class="final-signature">
         <img class="logo" src="logo.png" alt="ID-LAB NYC">
@@ -160,33 +158,67 @@
 
     <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
 
-    <!-- Last slideshow after contact button -->
+    <!-- Final Slideshow -->
     <div class="slideshow" id="finaloma">
-        <div class="slide active"><img src="Images/01.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div></div>
-        <div class="slide"><img src="Images/02.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Monogram, Osaka 2025</div></div>
-        <div class="slide"><img src="Images/03.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Monogram, Bangkok 2025</div></div>
-        <div class="slide"><img src="Images/04.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Trunkscape, Bangkok 2025</div></div>
-        <div class="slide"><img src="Images/05.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Origins, Shanghai 2025</div></div>
-        <div class="slide"><img src="Images/06.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – LV & Japan, Shanghai 2025</div></div>
-        <div class="slide"><img src="Images/07.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Atelier, Seoul 2025</div></div>
+        <div class="slide active"><img src="Images/01.jpg"></div>
+        <div class="slide"><img src="Images/02.jpg"></div>
+        <div class="slide"><img src="Images/03.jpg"></div>
+        <div class="slide"><img src="Images/04.jpg"></div>
+        <div class="slide"><img src="Images/05.jpg"></div>
+        <div class="slide"><img src="Images/06.jpg"></div>
+        <div class="slide"><img src="Images/07.jpg"></div>
     </div>
+    <div class="slideshow-caption" id="caption-finaloma">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div>
 
 </div>
 
 <script>
-function initSlideshow(id) {
-    const slides = document.querySelectorAll(`#${id} .slide`);
+function initSlideshow(slideshowId, captionId, captions) {
+    const slides = document.querySelectorAll(`#${slideshowId} .slide`);
+    const captionEl = document.getElementById(captionId);
     let i = 0;
+
     setInterval(() => {
-        slides[i].classList.remove('active');
+        slides.forEach(s => s.classList.remove('active'));
         i = (i + 1) % slides.length;
         slides[i].classList.add('active');
+        captionEl.textContent = captions[i];
     }, 3800);
 }
 
-initSlideshow('oma1');
-initSlideshow('retail');
-initSlideshow('finaloma');
+// Captions arrays
+const omaCaptions = [
+    "OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025",
+    "OMA · Louis Vuitton Visionary Journeys – Monogram, Osaka 2025",
+    "OMA · Louis Vuitton Visionary Journeys – LV & Japan, Osaka 2025",
+    "OMA · Louis Vuitton Visionary Journeys – Trunkscape, Osaka 2025",
+    "OMA · Louis Vuitton Visionary Journeys – LV & Japan, Osaka 2025",
+    "OMA · Louis Vuitton Visionary Journeys – Atelier, Osaka 2025",
+    "OMA · Louis Vuitton Visionary Journeys – Materials, Osaka 2025"
+];
+
+const retailCaptions = [
+    "The Boston Consulting Group, Miami",
+    "The Boston Consulting Group, Miami",
+    "The Boston Consulting Group, Miami",
+    "Giada Flagship, Boston",
+    "Golden Goose, Chicago",
+    "Golden Goose, Boston"
+];
+
+const finalCaptions = [
+    "OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025",
+    "OMA · Louis Vuitton Visionary Journeys – Monogram, Osaka 2025",
+    "OMA · Louis Vuitton Visionary Journeys – Monogram, Bangkok 2025",
+    "OMA · Louis Vuitton Visionary Journeys – Trunkscape, Bangkok 2025",
+    "OMA · Louis Vuitton Visionary Journeys – Origins, Shanghai 2025",
+    "OMA · Louis Vuitton Visionary Journeys – LV & Japan, Shanghai 2025",
+    "OMA · Louis Vuitton Visionary Journeys – Atelier, Seoul 2025"
+];
+
+initSlideshow('oma1', 'caption-oma1', omaCaptions);
+initSlideshow('retail', 'caption-retail', retailCaptions);
+initSlideshow('finaloma', 'caption-finaloma', finalCaptions);
 </script>
 
 </body>
