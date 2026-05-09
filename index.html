@@ -3,198 +3,188 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ID-LAB NYC</title>
-
+<title>ID-LAB.nyc </title>
 <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body{
-        background:#000;
-        color:#fff;
-        overflow:hidden;
-        font-family:Helvetica,Arial,sans-serif;
-        height:100vh;
-        cursor:pointer;
+        font-family: Helvetica, Arial, sans-serif;
+        line-height: 1.75;
+        color: #222;
+        background: #fff;
+        font-size: clamp(12px, 2.75vw, 12.8px);
+        font-weight:700;
+       margin-bottom:1rem;
+        text-transform: uppercase;
+        
+
+    }
+    .container{
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 0 28px 100px;
     }
 
-    /* Top Square Slideshow */
-    .top-square{
-        position:fixed;
-        top:0; left:0;
-        width:100vw;
-        height:50vh;
-        z-index:1;
+    /* Hero with logo only */
+    .hero{
+        height:100vh;
+        background:#000;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+    .logo{
+        width: 160px;
+        height:auto;
+    }
+
+    .slideshow{
+        position:relative;
+        width:100%;
+        height:520px;
+        margin: 55px 0;
+        background:#000;
     }
     .slide{
         position:absolute;
         top:0; left:0;
         width:100%; height:100%;
         opacity:0;
-        transition:opacity 0.5s ease;
-    }
-    .slide img{
-        width:100%; height:100%;
-        object-fit:cover;
+        transition:opacity 0.7s ease;
     }
     .slide.active{opacity:1;}
-
-    .logo{
+    .slide img{
+        width:100%; height:100%;
+        object-fit:cover;   /* Landscape */
+    }
+    .caption{
         position:absolute;
-        top:50%; left:50%;
-        transform:translate(-50%, -50%);
-        width:90px;
-        height:auto;
-        z-index:10;
-        filter:drop-shadow(0 0 15px rgba(255,255,255,0.9));
-    }
-
-    /* Bottom Square Text */
-    .bottom-square{
-        position:fixed;
-        bottom:0; left:0;
-        width:100vw;
-        height:50vh;
-        z-index:20;
-        display:flex;
-        align-items:flex-start;
-        justify-content:center;
-        padding:50px 8% 80px;
+        bottom:0; left:0; right:0;
         background:rgba(0,0,0,0.75);
-        text-align:left;
-        overflow-y:auto;
+        color:white;
+        padding:16px 25px;
+        font-size:15px;
+        line-height:1.45;
+        text-transform: none;   /* Reverted caption style */
+        letter-spacing: normal;
+        font-weight: normal;
     }
 
-    .splash-text{
-        max-width:100%;
-        line-height:1.35;
+    p{
+        margin-bottom:1.7rem;
     }
 
-    .splash-text p{
-        font-size: clamp(12px, 2.75vw, 12.8px);
-        font-weight:700;
-        margin-bottom:1rem;
-        text-transform:uppercase;
-    }
-
-    /* Contact Button */
     .contact-btn{
-        position:fixed;
-        bottom:28px;
-        left:8%;
-        z-index:30;
+        display:block;
+        margin: 60px auto 40px;
+        width: fit-content;
         color:#000;
         background:#fff;
         text-decoration:none;
         text-transform:uppercase;
-        font-size:11px;
+        font-size:12px;
         font-weight:bold;
         letter-spacing:2.2px;
-        border:2px solid #fff;
-        padding:9px 26px;
+        border:2px solid #000;
+        padding:12px 34px;
     }
 
-    /* Color Inversion */
-    body.inverted{
-        background:#fff;
-        color:#000;
-    }
-    body.inverted .bottom-square{
-        background:rgba(255,255,255,0.9);
-    }
-    body.inverted .contact-btn{
-        color:#fff;
-        background:#000;
-        border-color:#000;
-    }
-    body.inverted .logo{
-        filter:drop-shadow(0 0 15px rgba(0,0,0,0.8));
+    .signature{
+        text-align:center;
+        margin: 60px 0 30px;
+        font-size:12px;
+        letter-spacing:2px;
     }
 </style>
 </head>
 <body>
 
-<!-- Top Square - All your original images -->
-<div class="top-square">
-    <div class="slide active"><img src="Images/01.jpg"></div>
-    <div class="slide"><img src="Images/02.jpg"></div>
-    <div class="slide"><img src="Images/03.jpg"></div>
-    <div class="slide"><img src="Images/04.jpg"></div>
-    <div class="slide"><img src="Images/05.jpg"></div>
-    <div class="slide"><img src="Images/06.jpg"></div>
-    <div class="slide"><img src="Images/06-B.jpg"></div>
-    <div class="slide"><img src="Images/07.jpg"></div>
-    <div class="slide"><img src="Images/08.jpg"></div>
-    <div class="slide"><img src="Images/09.jpg"></div>
-    <div class="slide"><img src="Images/10.jpg"></div>
-    <div class="slide"><img src="Images/11.jpg"></div>
-    <div class="slide"><img src="Images/12.jpg"></div>
-    <div class="slide"><img src="Images/13.jpg"></div>
-    <div class="slide"><img src="Images/14.jpg"></div>
-    <div class="slide"><img src="Images/15.jpg"></div>
-    <div class="slide"><img src="Images/16.jpg"></div>
-    <div class="slide"><img src="Images/17.jpg"></div>
-    <div class="slide"><img src="Images/18.jpg"></div>
-    <div class="slide"><img src="Images/19.jpg"></div>
-    <div class="slide"><img src="Images/20.jpg"></div>
-    <div class="slide"><img src="Images/21.jpg"></div>
-    <div class="slide"><img src="Images/22.jpg"></div>
+<!-- Hero - Only Logo -->
+<div class="hero">
     <img class="logo" src="logo.png" alt="ID-LAB NYC">
 </div>
 
-<!-- Bottom Square Text -->
-<div class="bottom-square">
-    <div class="splash-text">
-        <p>Imagine stepping inside a place and immediately understanding what it stands for.</p>
-        <p>Not because someone told you, but because material, shape, light, rhythm, every detail all speak the same coherent language.</p>
-        <p>That’s what we build.</p>
-        <p>We are an identity laboratory that translates your core values into physical spaces that tell your unique story with precision and emotional depth.</p>
-        <p>If your project is driven by something you deeply care about, we should talk.</p>
+<div class="container">
+
+    <p>Imagine stepping inside a place and immediately understanding what it stands for. Not because someone told you, but because material, shape, light, rhythm, every detail all speak the same coherent language.</p>
+
+    <p>That’s what we build.</p>
+
+    <p>We are an identity laboratory that translates your core values into physical environments that feel meaningful, precise, and emotionally connected.</p>
+
+    <p>Identity is not a logo.
+       Identity is not a website.
+       Identity is not a marketing campaign.</p>
+
+    <p>Identity is what remains when everything superficial is stripped away.</p>
+
+    <p>It is your purpose, the convictions that guide every decision, the reason the organization exists, and the impression you want to leave in those who experience your space.</p>
+
+    <!-- OMA Osaka -->
+    <div class="slideshow" id="oma1">
+        <div class="slide active"><img src="Images/01.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div></div>
+        <div class="slide"><img src="Images/02.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Monogram, Osaka 2025</div></div>
+        <div class="slide"><img src="Images/06-B.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – LV & Japan, Osaka 2025</div></div>
+        <div class="slide"><img src="Images/19.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Trunkscape, Osaka 2025</div></div>
+        <div class="slide"><img src="Images/20.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – LV & Japan, Osaka 2025</div></div>
+        <div class="slide"><img src="Images/21.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Atelier, Osaka 2025</div></div>
+        <div class="slide"><img src="Images/22.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys – Materials, Osaka 2025</div></div>
     </div>
+
+    <p>Most architects treat identity as an afterthought, while branding treats space as background. We believe the opposite. A space becomes truly powerful when it becomes the physical continuation of who you are.</p>
+
+    <p>Space is the strongest medium for expressing and impressing a message of identity. Architecture is space identity.</p>
+
+    <!-- misc + Retail -->
+    <div class="slideshow" id="retail">
+        <div class="slide active"><img src="Images/08.jpg"><div class="caption">The Boston Consulting Group, Miami</div></div>
+        <div class="slide"><img src="Images/09.jpg"><div class="caption">The Boston Consulting Group, Miami</div></div>
+        <div class="slide"><img src="Images/10.jpg"><div class="caption">The Boston Consulting Group, Miami</div></div>
+        <div class="slide"><img src="Images/15.jpg"><div class="caption">Giada Flagship, Boston</div></div>
+        <div class="slide"><img src="Images/17.jpg"><div class="caption">Golden Goose, Chicago</div></div>
+        <div class="slide"><img src="Images/18.jpg"><div class="caption">Golden Goose, Boston</div></div>
+    </div>
+
+    <p>Our process is deliberate and disciplined. We develop a set of guiding principles that establish a direct link between identity and experiential outcomes. Every design choice, program layout, material selection, lighting effect, acoustic atmosphere, scent, temperature is evaluated against this narrative.</p>
+
+    <p>Architecture is not merely the sum of circulation, lighting, or finishes. It is the deliberate sequence of perceptions, emotions, and interactions that allows someone to enter, inhabit, and internalize a vision.</p>
+
+    <!-- Final big OMA slideshow at the very end -->
+    <div class="slideshow" id="finaloma">
+        <div class="slide active"><img src="Images/01.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys, Osaka</div></div>
+        <div class="slide"><img src="Images/02.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys, Osaka</div></div>
+        <div class="slide"><img src="Images/03.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys, Bangkok</div></div>
+        <div class="slide"><img src="Images/04.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys, Bangkok</div></div>
+        <div class="slide"><img src="Images/05.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys, Shanghai</div></div>
+        <div class="slide"><img src="Images/06.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys, Shanghai</div></div>
+        <div class="slide"><img src="Images/07.jpg"><div class="caption">OMA · Louis Vuitton Visionary Journeys, Seoul</div></div>
+    </div>
+
+    <div class="signature">
+        ID-LAB<br>
+        New York
+    </div>
+
+    <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
+
 </div>
 
-<a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
-
 <script>
-const slides = document.querySelectorAll('.slide');
-let current = 0;
-let isInverted = false;
+function initSlideshow(id) {
+    const slides = document.querySelectorAll(`#${id} .slide`);
+    let i = 0;
+    setInterval(() => {
+        slides[i].classList.remove('active');
+        i = (i + 1) % slides.length;
+        slides[i].classList.add('active');
+    }, 3800);
+}
 
-document.body.addEventListener('click', function(e) {
-    if (e.target.closest('.contact-btn')) return;
-
-    isInverted = !isInverted;
-    document.body.classList.toggle('inverted', isInverted);
-
-    slides[current].classList.remove('active');
-    current = (current + 1) % slides.length;
-    slides[current].classList.add('active');
-});
+initSlideshow('oma1');
+initSlideshow('retail');
+initSlideshow('finaloma');
 </script>
+
 </body>
 </html>
 
-hidden 
-const captions =  
-    "01.jpg": "OMA · Louis Vuitton Visionary Journeys – Origins<br>Osaka · 2025",
-    "02.jpg": "OMA · Louis Vuitton Visionary Journeys – Monogram<br>Osaka · 2025",
-    "03.jpg": "OMA · Louis Vuitton Visionary Journeys – Trunkscape<br>Bangkok · 2024",
-    "04.jpg": "OMA · Louis Vuitton Visionary Journeys – Giveaway<br>Bangkok · 2024",
-    "05.jpg": "OMA · Louis Vuitton Visionary Journeys – Sport<br>Shanghai · 2025",
-    "06.jpg": "OMA · Louis Vuitton Visionary Journeys – Fashion Icons<br>Shanghai · 2025",
-    "06-B.jpg": "OMA · Louis Vuitton Visionary Journeys – LV & Japan<br>Osaka · 2025",
-    "07.jpg": "OMA · Louis Vuitton Visionary Journeys – Music<br>Seoul · 2025",
-    "08.jpg": "Anastasio Architects & Stefano Pasqualetti Design<br>The Boston Consulting Group (BCG) · Miami · 2020",
-    "09.jpg": "Anastasio Architects & Stefano Pasqualetti Design<br>The Boston Consulting Group (BCG) · Miami · 2020",
-    "10.jpg": "Anastasio Architects & Stefano Pasqualetti Design<br>The Boston Consulting Group (BCG) · Miami · 2020",
-    "11.jpg": "Anastasio Architects · A. Pasta Bar<br>interior design by Alessandro Pasquale Studio · New York · 2017",
-    "12.jpg": "Anastasio Architects · A. Pasta Bar<br>interior design by Alessandro Pasquale Studio · New York · 2017",
-    "13.jpg": "AR Architecture · Dear Irving on Hudson<br>interior design by Delphine Mauroit · New York · 2018",
-    "14.jpg": "AR Architecture · Dear Irving on Hudson<br>interior design by Delphine Mauroit · New York · 2018",
-    "15.jpg": "Anastasio Architects · Giada Flagship<br>concept by Claudio Silvestrin · Boston · 2019",
-    "16.jpg": "Anastasio Architects · Giada Flagship<br>concept by Claudio Silvestrin · Boston · 2019",
-    "17.jpg": "Anastasio Architects · Golden Goose<br>Chicago · 2019",
-    "18.jpg": "Anastasio Architects · Golden Goose<br>Boston · 2020",
-    "19.jpg": "OMA · Louis Vuitton Visionary Journeys – Trunkscape<br>Osaka · 2025",
-    "20.jpg": "OMA · Louis Vuitton Visionary Journeys – LV & Japan<br>Osaka · 2025",
-    "21.jpg": "OMA · Louis Vuitton Visionary Journeys – Atelier<br>Osaka · 2025",
-    "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials<br>Osaka · 
 
