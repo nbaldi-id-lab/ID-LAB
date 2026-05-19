@@ -40,7 +40,7 @@
         color: #555;
         opacity: 0.18;
         transform: translateY(60px);
-        transition: all 1.1s cubic-bezier(0.23, 1, 0.32, 1);
+        transition: all 0.95s cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
     p.reveal {
@@ -49,7 +49,6 @@
         transform: translateY(0);
     }
 
-    /* Strong uppercase - Centered */
     p.strong {
         text-transform: uppercase;
         font-weight: 500;
@@ -57,7 +56,6 @@
         text-align: center;
     }
 
-    /* Lowercase readable text - Left aligned, Serif */
     p.normal {
         text-transform: none;
         font-size: 20px;
@@ -70,7 +68,6 @@
         margin-top: 0;
     }
 
-    /* Slideshow */
     .slideshow{
         position: relative;
         width: 100%;
@@ -147,7 +144,6 @@
         <p class="strong">That’s what we build</p>
     </div>
 
-    <!-- First Slideshow -->
     <div class="slideshow" id="oma1">
         <div class="slide active"><img src="Images/01.jpg"></div>
         <div class="slide"><img src="Images/02.jpg"></div>
@@ -159,7 +155,6 @@
     </div>
     <div class="slideshow-caption" id="caption-oma1">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div>
 
-    <!-- Core statement -->
     <p class="strong">We are an identity laboratory that translates your core values into immersive experiences that feel meaningful and memorable</p>
 
     <p class="normal">Identity is not a logo.<br>Identity is not a website.<br>Identity is not a marketing campaign.</p>
@@ -168,7 +163,6 @@
     
     <p class="normal">It is your purpose, your convictions, the reason your organization exists, and the lasting impression you leave on everyone who experiences your space.</p>
 
-    <!-- Retail Slideshow -->
     <div class="slideshow" id="retail">
         <div class="slide active"><img src="Images/08.jpg"></div>
         <div class="slide"><img src="Images/09.jpg"></div>
@@ -183,7 +177,6 @@
     
     <p class="normal">Architecture is truly powerful when it becomes the physical embodiment of your identity. It is the strongest medium for expressing identity. <br><br>More than the sum of function, form, and materials, we design the deliberate sequence of perceptions, emotions, and interactions that allows people to experience your brand.</p>
 
-    <!-- Final Slideshow -->
     <div class="slideshow" id="finaloma">
         <div class="slide active"><img src="Images/01.jpg"></div>
         <div class="slide"><img src="Images/02.jpg"></div>
@@ -197,7 +190,6 @@
 
     <p class="normal">If your project is driven by something real, something worth remembering — if there is a story worth expressing, we should talk.</p>
 
-    <!-- Updated Signature Section -->
     <div class="final-signature">
         <img class="logo" src="logo.png" alt="ID-LAB NYC">
     </div>
@@ -236,18 +228,28 @@ initSlideshow('oma1', 'caption-oma1', omaCaptions);
 initSlideshow('retail', 'caption-retail', retailCaptions);
 initSlideshow('finaloma', 'caption-finaloma', finalCaptions);
 
-// Extreme Reversible Reveal
-function revealOnScroll() {
-    const paragraphs = document.querySelectorAll('p');
-    const triggerBottom = window.innerHeight * 0.75;
+// Cleaner & more decisive reveal - text disappears fully before re-adjusting
+let ticking = false;
 
-    paragraphs.forEach(p => {
-        const rect = p.getBoundingClientRect();
-        if (rect.top < triggerBottom && rect.bottom > 120) {
-            p.classList.add('reveal');
-        } else {
-            p.classList.remove('reveal');
-        }
+function revealOnScroll() {
+    if (ticking) return;
+    ticking = true;
+
+    requestAnimationFrame(() => {
+        const paragraphs = document.querySelectorAll('p');
+        const vh = window.innerHeight;
+        const showThreshold = vh * 0.8;
+        const hideThreshold = vh * 0.2;   // Disappears earlier when scrolling up
+
+        paragraphs.forEach(p => {
+            const rect = p.getBoundingClientRect();
+            if (rect.top < showThreshold && rect.bottom > hideThreshold) {
+                p.classList.add('reveal');
+            } else {
+                p.classList.remove('reveal');
+            }
+        });
+        ticking = false;
     });
 }
 
