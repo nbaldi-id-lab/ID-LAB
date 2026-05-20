@@ -144,11 +144,12 @@
     <div class="slideshow" id="oma1">
         <div class="slide active"><img src="Images/01.jpg"></div>
         <div class="slide"><img src="Images/02.jpg"></div>
-        <div class="slide"><img src="Images/06-B.jpg"></div>
+        <div class="slide"><img src="Images/06.jpg"></div>
         <div class="slide"><img src="Images/19.jpg"></div>
         <div class="slide"><img src="Images/20.jpg"></div>
         <div class="slide"><img src="Images/21.jpg"></div>
-        <div class="slide"><img src="Images/22.jpg"></div>
+        <div class="slide"><img src="Images/04.jpg"></div>
+
     </div>
     <div class="slideshow-caption" id="caption-oma1"></div>
 
@@ -181,13 +182,15 @@
         <div class="slide"><img src="Images/03.jpg"></div>
         <div class="slide"><img src="Images/04.jpg"></div>
         <div class="slide"><img src="Images/05.jpg"></div>
-        <div class="slide"><img src="Images/06.jpg"></div>
+        <div class="slide"><img src="Images/15-B.jpg"></div>
+        <div class="slide"><img src="Images/10-B.jpg"></div>
         <div class="slide"><img src="Images/06-B.jpg"></div>
-        <div class="slide"><img src="Images/07.jpg"></div>
+        <div class="slide"><img src="Images/07-B.jpg"></div>
         <div class="slide"><img src="Images/19.jpg"></div>
         <div class="slide"><img src="Images/20.jpg"></div>
         <div class="slide"><img src="Images/21.jpg"></div>
         <div class="slide"><img src="Images/22.jpg"></div>
+        <div class="slide"><img src="Images/23.jpg"></div>
     </div>
     <div class="slideshow-caption" id="caption-finaloma"></div>
 
@@ -214,33 +217,37 @@ function initSlideshow(slideshowId, captionId) {
     const slides = container.querySelectorAll('.slide');
     const captionEl = document.getElementById(captionId);
     let current = 0;
+    let timer;
 
     function showSlide(n) {
         slides.forEach(s => s.classList.remove('active'));
         slides[n].classList.add('active');
         
         const filename = slides[n].querySelector('img').src.split('/').pop();
-        if (imageCaptions[filename]) {
-            captionEl.innerHTML = imageCaptions[filename];
-        }
+        captionEl.innerHTML = imageCaptions[filename] || "";
     }
 
-    // Auto advance
-    setInterval(() => {
-        current = (current + 1) % slides.length;
-        showSlide(current);
-    }, 3800);
+    function startTimer() {
+        if (timer) clearInterval(timer);
+        timer = setInterval(() => {
+            current = (current + 1) % slides.length;
+            showSlide(current);
+        }, 3800);
+    }
 
-    // Click to go to next image (only this slideshow)
+    // Click on the slideshow → go to next + restart timer
     container.addEventListener('click', () => {
         current = (current + 1) % slides.length;
         showSlide(current);
+        startTimer();           // Restart the auto timer for this slideshow only
     });
 
+    // Initial display
     showSlide(0);
+    startTimer();
 }
 
-// Initialize all slideshows
+// Initialize each slideshow independently
 initSlideshow('oma1', 'caption-oma1');
 initSlideshow('retail', 'caption-retail');
 initSlideshow('finaloma', 'caption-finaloma');
