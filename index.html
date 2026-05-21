@@ -35,15 +35,6 @@
     p {
         margin-bottom: 2.4rem;
         margin-top: 2.4rem;
-        color: #555;
-        opacity: 0.18;
-        transform: translateY(40px);
-        transition: all 1s ease;
-    }
-    p.reveal {
-        color: #fff;
-        opacity: 1;
-        transform: translateY(0);
     }
 
     p.strong {
@@ -225,6 +216,7 @@ function initSlideshow(slideshowId, captionId) {
         }, 3800);
     }
 
+    // Click to advance + reset timer for this slideshow only
     container.addEventListener('click', () => {
         current = (current + 1) % slides.length;
         showSlide(current);
@@ -235,26 +227,10 @@ function initSlideshow(slideshowId, captionId) {
     startTimer();
 }
 
-// Initialize slideshows
+// Initialize
 initSlideshow('oma1', 'caption-oma1');
 initSlideshow('retail', 'caption-retail');
 initSlideshow('finaloma', 'caption-finaloma');
-
-// Simple reliable reveal
-function revealOnScroll() {
-    document.querySelectorAll('p').forEach(p => {
-        const rect = p.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.9) {
-            p.classList.add('reveal');
-        }
-    });
-}
-
-window.addEventListener('scroll', revealOnScroll);
-window.addEventListener('load', () => {
-    revealOnScroll();
-    setTimeout(revealOnScroll, 200);   // Force reveal
-});
 </script>
 
 </body>
