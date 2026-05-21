@@ -20,6 +20,7 @@
         margin: 0 auto;
         padding: 30px 20px 80px;
     }
+
     .hero{
         height:33vh;
         background:#000;
@@ -32,9 +33,20 @@
         height:auto;
     }
 
+    /* Extreme Greyed-out Effect */
     p {
         margin-bottom: 2.4rem;
         margin-top: 2.4rem;
+        color: #555;
+        opacity: 0.18;
+        transform: translateY(60px);
+        transition: all 0.95s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    p.reveal {
+        color: #fff;
+        opacity: 1;
+        transform: translateY(0);
     }
 
     p.strong {
@@ -52,7 +64,9 @@
         text-align: left;
     }
 
-    p:first-child { margin-top: 0; }
+    p:first-child {
+        margin-top: 0;
+    }
 
     .slideshow{
         position: relative;
@@ -61,7 +75,6 @@
         margin: 45px 0 12px;
         background: #000;
         overflow: hidden;
-        cursor: pointer;
     }
     .slide{
         position: absolute;
@@ -80,7 +93,7 @@
 
     .slideshow-caption {
         color:#ccc;
-        font-size: 9px;
+        font-size: 8px;
         line-height: 1.3;
         text-align: center;
         text-transform: none;
@@ -140,14 +153,14 @@
         <div class="slide"><img src="Images/21.jpg"></div>
         <div class="slide"><img src="Images/22.jpg"></div>
     </div>
-    <div class="slideshow-caption" id="caption-oma1"></div>
+    <div class="slideshow-caption" id="caption-oma1">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div>
 
-    <p class="strong">We are an identity laboratory that translates your core values into immersive experiences that feel meaningful and memorable</p>
+    <p class="strong">We are an identity laboratory that translates your core values into immersive experiences</p>
 
     <p class="normal">Identity is not a logo.<br>Identity is not a website.<br>Identity is not a marketing campaign.</p>
-   
+    
     <p class="normal">Identity is what remains when everything superficial is stripped away.</p>
-   
+    
     <p class="normal">It is your purpose, your convictions, the reason your organization exists, and the lasting impression you leave on everyone who experiences your space.</p>
 
     <div class="slideshow" id="retail">
@@ -158,10 +171,10 @@
         <div class="slide"><img src="Images/17.jpg"></div>
         <div class="slide"><img src="Images/18.jpg"></div>
     </div>
-    <div class="slideshow-caption" id="caption-retail"></div>
+    <div class="slideshow-caption" id="caption-retail">The Boston Consulting Group, Miami</div>
 
     <p class="normal">Most architects treat identity as a veneer, while branding treats space as background. We believe the opposite.</p>
-   
+    
     <p class="normal">Architecture is truly powerful when it becomes the physical embodiment of your identity. It is the strongest medium for expressing identity. <br><br>More than the sum of function, form, and materials, we design the deliberate sequence of perceptions, emotions, and interactions that allows people to experience your brand.</p>
 
     <div class="slideshow" id="finaloma">
@@ -172,9 +185,8 @@
         <div class="slide"><img src="Images/05.jpg"></div>
         <div class="slide"><img src="Images/06.jpg"></div>
         <div class="slide"><img src="Images/07.jpg"></div>
-        <div class="slide"><img src="Images/82McDougal-L.avif"></div>
     </div>
-    <div class="slideshow-caption" id="caption-finaloma"></div>
+    <div class="slideshow-caption" id="caption-finaloma">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div>
 
     <p class="normal">If your project is driven by something real, something worth remembering — if there is a story worth expressing, we should talk.</p>
 
@@ -192,45 +204,57 @@
 
 </div>
 
-<script src="captions.js"></script>
 <script>
-function initSlideshow(slideshowId, captionId) {
-    const container = document.getElementById(slideshowId);
-    const slides = container.querySelectorAll('.slide');
+function initSlideshow(slideshowId, captionId, captions) {
+    const slides = document.querySelectorAll(`#${slideshowId} .slide`);
     const captionEl = document.getElementById(captionId);
-    let current = 0;
-    let timer;
+    let i = 0;
 
-    function showSlide(n) {
+    setInterval(() => {
         slides.forEach(s => s.classList.remove('active'));
-        slides[n].classList.add('active');
-        const filename = slides[n].querySelector('img').src.split('/').pop();
-        captionEl.innerHTML = imageCaptions[filename] || "";
-    }
-
-    function startTimer() {
-        if (timer) clearInterval(timer);
-        timer = setInterval(() => {
-            current = (current + 1) % slides.length;
-            showSlide(current);
-        }, 3800);
-    }
-
-    // Click to advance + reset timer for this slideshow only
-    container.addEventListener('click', () => {
-        current = (current + 1) % slides.length;
-        showSlide(current);
-        startTimer();
-    });
-
-    showSlide(0);
-    startTimer();
+        i = (i + 1) % slides.length;
+        slides[i].classList.add('active');
+        captionEl.textContent = captions[i];
+    }, 3800);
 }
 
-// Initialize
-initSlideshow('oma1', 'caption-oma1');
-initSlideshow('retail', 'caption-retail');
-initSlideshow('finaloma', 'caption-finaloma');
+const omaCaptions = ["OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025","OMA · Louis Vuitton Visionary Journeys – Monogram, Osaka 2025","OMA · Louis Vuitton Visionary Journeys – LV & Japan, Osaka 2025","OMA · Louis Vuitton Visionary Journeys – Trunkscape, Osaka 2025","OMA · Louis Vuitton Visionary Journeys – LV & Japan, Osaka 2025","OMA · Louis Vuitton Visionary Journeys – Atelier, Osaka 2025","OMA · Louis Vuitton Visionary Journeys – Materials, Osaka 2025"];
+
+const retailCaptions = ["The Boston Consulting Group, Miami","The Boston Consulting Group, Miami","The Boston Consulting Group, Miami","Giada Flagship, Boston","Golden Goose, Chicago","Golden Goose, Boston"];
+
+const finalCaptions = ["OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025","OMA · Louis Vuitton Visionary Journeys – Monogram, Osaka 2025","OMA · Louis Vuitton Visionary Journeys – Monogram, Bangkok 2025","OMA · Louis Vuitton Visionary Journeys – Trunkscape, Bangkok 2025","OMA · Louis Vuitton Visionary Journeys – Origins, Shanghai 2025","OMA · Louis Vuitton Visionary Journeys – LV & Japan, Shanghai 2025","OMA · Louis Vuitton Visionary Journeys – Atelier, Seoul 2025"];
+
+initSlideshow('oma1', 'caption-oma1', omaCaptions);
+initSlideshow('retail', 'caption-retail', retailCaptions);
+initSlideshow('finaloma', 'caption-finaloma', finalCaptions);
+
+// Cleaner & more decisive reveal - text disappears fully before re-adjusting
+let ticking = false;
+
+function revealOnScroll() {
+    if (ticking) return;
+    ticking = true;
+
+    requestAnimationFrame(() => {
+        const paragraphs = document.querySelectorAll('p');
+        const vh = window.innerHeight;
+        const showThreshold = vh * 0.8;
+        const hideThreshold = vh * 0.2;   // Disappears earlier when scrolling up
+
+        paragraphs.forEach(p => {
+            const rect = p.getBoundingClientRect();
+            if (rect.top < showThreshold && rect.bottom > hideThreshold) {
+                p.classList.add('reveal');
+            } else {
+                p.classList.remove('reveal');
+            }
+        });
+        ticking = false;
+    });
+}
+
+window.addEventListener('scroll', revealOnScroll, { passive: true });
+window.addEventListener('load', revealOnScroll);
 </script>
 
 </body>
