@@ -9,7 +9,7 @@
     body{
         font-family: Helvetica, Arial, sans-serif;
         line-height: 1.35;
-        color: #fff;
+        color: #fff;                    /* Always white */
         background: #000;
         font-size: 26px;
         font-weight: 400;
@@ -20,7 +20,6 @@
         margin: 0 auto;
         padding: 30px 20px 80px;
     }
-
     .hero{
         height:33vh;
         background:#000;
@@ -31,22 +30,6 @@
     .logo{
         width: 120px;
         height:auto;
-    }
-
-    /* Extreme Greyed-out Effect */
-    p {
-        margin-bottom: 2.4rem;
-        margin-top: 2.4rem;
-        color: #555;
-        opacity: 0.18;
-        transform: translateY(60px);
-        transition: all 0.95s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-
-    p.reveal {
-        color: #fff;
-        opacity: 1;
-        transform: translateY(0);
     }
 
     p.strong {
@@ -64,10 +47,6 @@
         text-align: left;
     }
 
-    p:first-child {
-        margin-top: 0;
-    }
-
     .slideshow{
         position: relative;
         width: 100%;
@@ -75,6 +54,7 @@
         margin: 45px 0 12px;
         background: #000;
         overflow: hidden;
+        cursor: pointer;
     }
     .slide{
         position: absolute;
@@ -83,177 +63,6 @@
         opacity: 0;
         transition: opacity 0.7s ease;
     }
-    .slide.active{ opacity: 1; }
-    .slide img{
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-    }
-
-    .slideshow-caption {
-        color:#ccc;
-        font-size: 9px;
-        line-height: 1.3;
-        text-align: center;
-        text-transform: none;
-        margin-top: 9px;
-        min-height: 22px;
-    }
-
-    .contact-btn{
-        display:block;
-        margin: 40px auto 20px;
-        width: 120px;
-        text-align: center;
-        color:#000;
-        background:#fff;
-        text-decoration:none;
-        text-transform:uppercase;
-        font-size:15px;
-        font-weight:bold;
-        letter-spacing:2.5px;
-        border:2px solid #000;
-        padding:9px 0;
-    }
-
-    .final-signature{
-        text-align:center;
-        margin: 60px 0 25px;
-    }
-
-    .contact-info {
-        text-align: center;
-        color: #aaa;
-        font-size: 13px;
-        line-height: 1.6;
-        text-transform: uppercase;
-    }
-</style>
-</head>
-<body>
-
-<div class="hero">
-    <img class="logo" src="logo.png" alt="ID-LAB NYC">
-</div>
-
-<div class="container">
-
-    <div class="intro-text">
-        <p class="normal">Imagine stepping inside a place and immediately understanding what it stands for. Not because someone told you, but because every material, shape, light, and rhythm speaks the same coherent language.<br></p>
-        <p class="strong">That’s what we build</p>
-    </div>
-
-    <div class="slideshow" id="oma1">
-        <div class="slide active"><img src="Images/01.jpg"></div>
-        <div class="slide"><img src="Images/02.jpg"></div>
-        <div class="slide"><img src="Images/06-B.jpg"></div>
-        <div class="slide"><img src="Images/19.jpg"></div>
-        <div class="slide"><img src="Images/20.jpg"></div>
-        <div class="slide"><img src="Images/21.jpg"></div>
-        <div class="slide"><img src="Images/22.jpg"></div>
-    </div>
-    <div class="slideshow-caption" id="caption-oma1">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div>
-
-    <p class="strong">We are an identity laboratory that translates your core values into immersive experiences</p>
-
-    <p class="normal">Identity is not a logo.<br>Identity is not a website.<br>Identity is not a marketing campaign.</p>
-    
-    <p class="normal">Identity is what remains when everything superficial is stripped away.</p>
-    
-    <p class="normal">It is your purpose, your convictions, the reason your organization exists, and the lasting impression you leave on everyone who experiences your space.</p>
-
-    <div class="slideshow" id="retail">
-        <div class="slide active"><img src="Images/08.jpg"></div>
-        <div class="slide"><img src="Images/09.jpg"></div>
-        <div class="slide"><img src="Images/10.jpg"></div>
-        <div class="slide"><img src="Images/15.jpg"></div>
-        <div class="slide"><img src="Images/17.jpg"></div>
-        <div class="slide"><img src="Images/18.jpg"></div>
-    </div>
-    <div class="slideshow-caption" id="caption-retail">The Boston Consulting Group, Miami</div>
-
-    <p class="normal">Most architects treat identity as a veneer, while branding treats space as background. We believe the opposite.</p>
-    
-    <p class="normal">Architecture is truly powerful when it becomes the physical embodiment of your identity. It is the strongest medium for expressing identity. <br><br>More than the sum of function, form, and materials, we design the deliberate sequence of perceptions, emotions, and interactions that allows people to experience your brand.</p>
-
-    <div class="slideshow" id="finaloma">
-        <div class="slide active"><img src="Images/01.jpg"></div>
-        <div class="slide"><img src="Images/02.jpg"></div>
-        <div class="slide"><img src="Images/03.jpg"></div>
-        <div class="slide"><img src="Images/04.jpg"></div>
-        <div class="slide"><img src="Images/05.jpg"></div>
-        <div class="slide"><img src="Images/06.jpg"></div>
-        <div class="slide"><img src="Images/07.jpg"></div>
-        <div class="slide"><img src="Images/82McDougal-L.avif"></div>       
-    </div>
-    <div class="slideshow-caption" id="caption-finaloma">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div>
-
-    <p class="normal">If your project is driven by something real, something worth remembering — if there is a story worth expressing, we should talk.</p>
-
-    <div class="final-signature">
-        <img class="logo" src="logo.png" alt="ID-LAB NYC">
-    </div>
-
-    <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
-
-    <div class="contact-info">
-        ID-LAB<br>
-        New York<br>
-        info@id-lab.nyc
-    </div>
-
-</div>
-
-<script>
-function initSlideshow(slideshowId, captionId, captions) {
-    const slides = document.querySelectorAll(`#${slideshowId} .slide`);
-    const captionEl = document.getElementById(captionId);
-    let i = 0;
-
-    setInterval(() => {
-        slides.forEach(s => s.classList.remove('active'));
-        i = (i + 1) % slides.length;
-        slides[i].classList.add('active');
-        captionEl.textContent = captions[i];
-    }, 3800);
-}
-
-initSlideshow('oma1', 'caption-oma1', omaCaptions);
-initSlideshow('retail', 'caption-retail', retailCaptions);
-initSlideshow('finaloma', 'caption-finaloma', finalCaptions);
-
-// Cleaner & more decisive reveal - text disappears fully before re-adjusting
-let ticking = false;
-
-function revealOnScroll() {
-    if (ticking) return;
-    ticking = true;
-
-    requestAnimationFrame(() => {
-        const paragraphs = document.querySelectorAll('p');
-        const vh = window.innerHeight;
-        const showThreshold = vh * 0.8;
-        const hideThreshold = vh * 0.2;   // Disappears earlier when scrolling up
-
-        paragraphs.forEach(p => {
-            const rect = p.getBoundingClientRect();
-            if (rect.top < showThreshold && rect.bottom > hideThreshold) {
-                p.classList.add('reveal');
-            } else {
-                p.classList.remove('reveal');
-            }
-        });
-        ticking = false;
-    });
-}
-
-window.addEventListener('scroll', revealOnScroll, { passive: true });
-window.addEventListener('load', revealOnScroll);
-</script>
-
-</body>
-</html>    }
     .slide.active{ opacity: 1; }
     .slide img{
         width: 100%;
@@ -410,201 +219,9 @@ function initSlideshow(slideshowId, captionId) {
     startTimer();
 }
 
-// Initialize slideshows
 initSlideshow('oma1', 'caption-oma1');
 initSlideshow('retail', 'caption-retail');
 initSlideshow('finaloma', 'caption-finaloma');
-
-// Simple reliable reveal
-function revealOnScroll() {
-    document.querySelectorAll('p').forEach(p => {
-        const rect = p.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.9) {
-            p.classList.add('reveal');
-        }
-    });
-}
-
-window.addEventListener('scroll', revealOnScroll);
-window.addEventListener('load', () => {
-    revealOnScroll();
-    setTimeout(revealOnScroll, 200);   // Force reveal
-});
-</script>
-
-</body>
-</html>        top: 0; left: 0;
-        width: 100%; height: 100%;
-        opacity: 0;
-        transition: opacity 0.7s ease;
-    }
-    .slide.active{ opacity: 1; }
-    .slide img{
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-    }
-
-    .slideshow-caption {
-        color:#ccc;
-        font-size: 9px;
-        line-height: 1.3;
-        text-align: center;
-        text-transform: none;
-        margin-top: 9px;
-        min-height: 22px;
-    }
-
-    .contact-btn{
-        display:block;
-        margin: 40px auto 20px;
-        width: 120px;
-        text-align: center;
-        color:#000;
-        background:#fff;
-        text-decoration:none;
-        text-transform:uppercase;
-        font-size:15px;
-        font-weight:bold;
-        letter-spacing:2.5px;
-        border:2px solid #000;
-        padding:9px 0;
-    }
-
-    .final-signature{
-        text-align:center;
-        margin: 60px 0 25px;
-    }
-
-    .contact-info {
-        text-align: center;
-        color: #aaa;
-        font-size: 13px;
-        line-height: 1.6;
-        text-transform: uppercase;
-    }
-</style>
-</head>
-<body>
-
-<div class="hero">
-    <img class="logo" src="logo.png" alt="ID-LAB NYC">
-</div>
-
-<div class="container">
-
-    <div class="intro-text">
-        <p class="normal">Imagine stepping inside a place and immediately understanding what it stands for. Not because someone told you, but because every material, shape, light, and rhythm speaks the same coherent language.<br></p>
-        <p class="strong">That’s what we build</p>
-    </div>
-
-    <div class="slideshow" id="oma1">
-        <div class="slide active"><img src="Images/01.jpg"></div>
-        <div class="slide"><img src="Images/02.jpg"></div>
-        <div class="slide"><img src="Images/06-B.jpg"></div>
-        <div class="slide"><img src="Images/19.jpg"></div>
-        <div class="slide"><img src="Images/20.jpg"></div>
-        <div class="slide"><img src="Images/21.jpg"></div>
-        <div class="slide"><img src="Images/22.jpg"></div>
-    </div>
-    <div class="slideshow-caption" id="caption-oma1">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div>
-
-    <p class="strong">We are an identity laboratory that translates your core values into immersive experiences</p>
-
-    <p class="normal">Identity is not a logo.<br>Identity is not a website.<br>Identity is not a marketing campaign.</p>
-    
-    <p class="normal">Identity is what remains when everything superficial is stripped away.</p>
-    
-    <p class="normal">It is your purpose, your convictions, the reason your organization exists, and the lasting impression you leave on everyone who experiences your space.</p>
-
-    <div class="slideshow" id="retail">
-        <div class="slide active"><img src="Images/08.jpg"></div>
-        <div class="slide"><img src="Images/09.jpg"></div>
-        <div class="slide"><img src="Images/10.jpg"></div>
-        <div class="slide"><img src="Images/15.jpg"></div>
-        <div class="slide"><img src="Images/17.jpg"></div>
-        <div class="slide"><img src="Images/18.jpg"></div>
-    </div>
-    <div class="slideshow-caption" id="caption-retail">The Boston Consulting Group, Miami</div>
-
-    <p class="normal">Most architects treat identity as a veneer, while branding treats space as background. We believe the opposite.</p>
-    
-    <p class="normal">Architecture is truly powerful when it becomes the physical embodiment of your identity. It is the strongest medium for expressing identity. <br><br>More than the sum of function, form, and materials, we design the deliberate sequence of perceptions, emotions, and interactions that allows people to experience your brand.</p>
-
-    <div class="slideshow" id="finaloma">
-        <div class="slide active"><img src="Images/01.jpg"></div>
-        <div class="slide"><img src="Images/02.jpg"></div>
-        <div class="slide"><img src="Images/03.jpg"></div>
-        <div class="slide"><img src="Images/04.jpg"></div>
-        <div class="slide"><img src="Images/05.jpg"></div>
-        <div class="slide"><img src="Images/06.jpg"></div>
-        <div class="slide"><img src="Images/07.jpg"></div>
-        <div class="slide"><img src="Images/82McDougal-L.avif"></div>       
-    </div>
-    <div class="slideshow-caption" id="caption-finaloma">OMA · Louis Vuitton Visionary Journeys – Origins, Osaka 2025</div>
-
-    <p class="normal">If your project is driven by something real, something worth remembering — if there is a story worth expressing, we should talk.</p>
-
-    <div class="final-signature">
-        <img class="logo" src="logo.png" alt="ID-LAB NYC">
-    </div>
-
-    <a href="mailto:info@id-lab.nyc" class="contact-btn">Contact</a>
-
-    <div class="contact-info">
-        ID-LAB<br>
-        New York<br>
-        info@id-lab.nyc
-    </div>
-
-</div>
-
-<script>
-function initSlideshow(slideshowId, captionId, captions) {
-    const slides = document.querySelectorAll(`#${slideshowId} .slide`);
-    const captionEl = document.getElementById(captionId);
-    let i = 0;
-
-    setInterval(() => {
-        slides.forEach(s => s.classList.remove('active'));
-        i = (i + 1) % slides.length;
-        slides[i].classList.add('active');
-        captionEl.textContent = captions[i];
-    }, 3800);
-}
-
-initSlideshow('oma1', 'caption-oma1', omaCaptions);
-initSlideshow('retail', 'caption-retail', retailCaptions);
-initSlideshow('finaloma', 'caption-finaloma', finalCaptions);
-
-// Cleaner & more decisive reveal - text disappears fully before re-adjusting
-let ticking = false;
-
-function revealOnScroll() {
-    if (ticking) return;
-    ticking = true;
-
-    requestAnimationFrame(() => {
-        const paragraphs = document.querySelectorAll('p');
-        const vh = window.innerHeight;
-        const showThreshold = vh * 0.8;
-        const hideThreshold = vh * 0.2;   // Disappears earlier when scrolling up
-
-        paragraphs.forEach(p => {
-            const rect = p.getBoundingClientRect();
-            if (rect.top < showThreshold && rect.bottom > hideThreshold) {
-                p.classList.add('reveal');
-            } else {
-                p.classList.remove('reveal');
-            }
-        });
-        ticking = false;
-    });
-}
-
-window.addEventListener('scroll', revealOnScroll, { passive: true });
-window.addEventListener('load', revealOnScroll);
 </script>
 
 </body>
