@@ -29,6 +29,6 @@ const imageCaptions = {
     "21.jpg": "OMA · Louis Vuitton Visionary Journeys – Atelier, Osaka, 2025",
     "22.jpg": "OMA · Louis Vuitton Visionary Journeys – Materials, Osaka, 2025"
    "23.jpg": "OMA · Louis Vuitton Visionary Journeys – Books, Shanghai 2025",
-   "82 McDougal_T.avif": "82 McDougal, Lvingroom View, New York, 2018"
+   "82McDougal-L.avif": "82 McDougal, Lvingroom View, New York, 2018"
 
 };
