@@ -51,18 +51,19 @@
     }
 
     p.strong {
-        text-transform: uppercase;
-        font-weight: 400;
-        letter-spacing: 1px;
-        text-align: center;
-/* Very gradual thickness adjustment */
-    text-shadow: 
-        0.15px 0 0 #000,
-        -0.15px 0 0 #000;
-    -webkit-text-stroke: 0.2px #000;
+    text-transform: uppercase;
+    font-weight: 400;
+    letter-spacing: 1.2px;
+    text-align: center;
+
+    /* Very gentle thickness boost */
+    -webkit-text-stroke: 0.45px #000;     /* main control - tweak this by 0.05px steps */
     paint-order: stroke fill;
-       
-       
+    
+    /* Very light shadow for extra softness */
+    text-shadow: 
+        0.3px 0 0 #000,
+        -0.3px 0 0 #000;
     }
 
     p.normal {
