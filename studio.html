@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Studio — ID-LAB.nyc</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="nav">
+    <a href="index.html">ID-LAB</a>
+    <a href="studio.html">Studio</a>
+    <a href="work.html">Work</a>
+    <a href="contact.html">Contact</a>
+  </header>
+
+  <div class="wrap">
+    <p>ID-LAB is an architecture office based in New York, founded by Niccolò Baldi as a laboratory for identity — on the conviction that identity shapes design, and that space is how identity is experienced.</p>
+
+    <p class="name">Niccolò Baldi</p>
+    <p class="meta"><a href="https://www.linkedin.com/in/niccolo-baldi-62734830/" target="_blank" rel="noopener">LinkedIn</a></p>
+
+    <p>NY State licensed architect and Senior Architect at OMA in New York.</p>
+    <p>My work is driven by the belief that architecture should express identity. Whether designing a retail environment, an office headquarters, or a private residence, I design spaces that authentically reflect the values, ambitions, and character of the people and brands they represent.</p>
+
+    <p>At OMA, I’ve played a key role in the Louis Vuitton Visionary Journeys exhibition series, creating immersive spatial experiences across Paris, Bangkok, Shanghai, Osaka, Seoul and other LV stores worldwide. This work reflects OMA’s intellectual rigor while fundamentally reinventing how retail brands approach storytelling through architecture — an evolution of earlier work with luxury retail brands (including Versace, Fendi, Golden Goose, Giada, Boucheron, Peserico, Velasca) that established my approach to high-end brand experiences.</p>
+
+    <div class="slideshow" id="oma1">
+      <div class="slide active"><img src="Images/OMA-LV-OSAKA-ORIG-01.avif" alt=""></div>
+      <div class="slide"><img src="Images/OMA-LV-OSAKA-MONO.avif" alt=""></div>
+      <div class="slide"><img src="Images/06-B.jpg" alt=""></div>
+      <div class="slide"><img src="Images/19.jpg" alt=""></div>
+      <div class="slide"><img src="Images/20.jpg" alt=""></div>
+      <div class="slide"><img src="Images/21.jpg" alt=""></div>
+      <div class="slide"><img src="Images/OMA-LV-BKK-ICON.avif" alt=""></div>
+    </div>
+    <div class="slideshow-caption" id="caption-oma1"></div>
+
+    <p>My focus on identity and creating memorable experiences has also been influenced by my work in hospitality, where I contributed at different stages of the design process to boutiques restaurants and bars in New York such as Sola Pasta Bar, Petit Abeille, and Dear Irving.</p>
+
+    <p>With OMA, I have also worked on highly complex, new construction projects for corporate and institutional clients such as the Discovery Partners Institute in Chicago’s The 78 and a confidential 21-story life sciences tower in Manhattan, coordinating interdisciplinary teams to achieve OMA’s design ambition. This experience consolidates my previous work with clients such as Fondazione Fiera Milano and the Boston Consulting Group (BCG).</p>
+
+    <div class="slideshow" id="retail">
+      <div class="slide active"><img src="Images/08.jpg" alt=""></div>
+      <div class="slide"><img src="Images/09.jpg" alt=""></div>
+      <div class="slide"><img src="Images/10.jpg" alt=""></div>
+      <div class="slide"><img src="Images/15.jpg" alt=""></div>
+      <div class="slide"><img src="Images/17.jpg" alt=""></div>
+      <div class="slide"><img src="Images/18.jpg" alt=""></div>
+    </div>
+    <div class="slideshow-caption" id="caption-retail"></div>
+
+    <p>My residential work spans both high-end interiors and multifamily projects, including a penthouse on Madison Avenue, residences on Park Avenue and Central Park West, and landmarked townhouses in Greenwich Village, as well as numerous multifamily residential developments across the US and the EU.</p>
+
+    <div class="slideshow" id="finaloma">
+      <div class="slide active"><img src="Images/82McDougal-L.avif" alt=""></div>
+      <div class="slide"><img src="Images/OMA-LV-OSAKA-ORIG-02.avif" alt=""></div>
+      <div class="slide"><img src="Images/03.jpg" alt=""></div>
+      <div class="slide"><img src="Images/04.jpg" alt=""></div>
+      <div class="slide"><img src="Images/05.jpg" alt=""></div>
+      <div class="slide"><img src="Images/06.jpg" alt=""></div>
+      <div class="slide"><img src="Images/07.jpg" alt=""></div>
+    </div>
+    <div class="slideshow-caption" id="caption-finaloma"></div>
+
+    <p>Across every scale, my work is characterized by bold spatial ideas, sophisticated user experience, and rigorous attention to detail - in the belief that exceptional architecture is achieved through a deliberate and research-driven scientific process.</p>
+    <p>Originally from Milan, I graduated summa cum laude from Politecnico di Milano with Bachelor’s and Master’s degrees in Architecture. I return regularly to Milan for Salone del Mobile, where architecture, fashion, and industrial design converge.</p>
+    <p>I’m always open to connecting with clients, collaborators, and designers working on ambitious projects. Feel free to reach out if you’d like to discuss how space can express identity.</p>
+  </div>
+
+  <footer>
+    <span class="ig" aria-hidden="true">◎</span>
+    <span>All content © ID-LAB Architecture</span>
+  </footer>
+
+  <script src="captions.js"></script>
+  <script>
+    function initSlideshow(id, cap) {
+      const root = document.getElementById(id);
+      if (!root) return;
+      const slides = root.querySelectorAll(".slide");
+      const captionEl = document.getElementById(cap);
+      let i = 0;
+      function show(n) {
+        slides.forEach(s => s.classList.remove("active"));
+        slides[n].classList.add("active");
+        const img = slides[n].querySelector("img");
+        const text = captionForSrc(img && img.getAttribute("src"));
+        if (captionEl && text) captionEl.textContent = text;
+      }
+      show(0);
+      setInterval(() => { i = (i + 1) % slides.length; show(i); }, 3800);
+    }
+    initSlideshow("oma1", "caption-oma1");
+    initSlideshow("retail", "caption-retail");
+    initSlideshow("finaloma", "caption-finaloma");
+  </script>
+</body>
+</html>
