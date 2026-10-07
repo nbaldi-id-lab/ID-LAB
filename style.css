@@ -299,7 +299,9 @@ body.home footer {
 .lab-close a { border-bottom: 1px solid #111; }
 
 .list-label {
-  margin: 2.2em 0 0;
+  margin: 3.4em 0 0;
+  padding-top: 1.35em;
+  border-top: 1px solid #ececec;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -307,26 +309,18 @@ body.home footer {
 }
 .services {
   list-style: none;
-  margin: 0.55em 0 0;
-  padding: 0.7em 0 0;
-  border-top: 1px solid #ececec;
+  margin: 0.85em 0 0;
+  padding: 0;
+  border: 0;
 }
 .services li {
-  position: relative;
   font-size: clamp(17px, 3.5vw, 24px);
-  line-height: 1.5;
+  line-height: 1.2;
   letter-spacing: -0.03em;
-  padding: 0.22em 0 0.22em 1.15em;
+  padding: 0.55em 0;
+  border-bottom: 1px solid #ececec;
 }
-.services li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.72em;
-  width: 5px;
-  height: 5px;
-  background: #111;
-}
+.services li::before { content: none; }
 
 .seq {
   list-style: none;
