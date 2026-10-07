@@ -337,16 +337,18 @@ body.home footer {
 .seq > li {
   position: relative;
   margin: 0 0 1.35em;
-  padding: 0 0 0 1.15em;
+  padding: 0;
 }
-.seq > li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.55em;
-  width: 5px;
-  height: 5px;
-  background: #111;
+.claim {
+  font-size: clamp(17px, 3.5vw, 24px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  margin-bottom: 0.15em;
+}
+.seq > li::before,
+.seq .sub li::before {
+  content: none;
 }
 .seq .n {
   display: block;
