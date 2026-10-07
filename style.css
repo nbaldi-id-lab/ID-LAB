@@ -298,10 +298,17 @@ body.home footer {
 }
 .lab-close a { border-bottom: 1px solid #111; }
 
+.list-label {
+  margin: 2.2em 0 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 .services {
   list-style: none;
-  margin: 2.4em 0 0;
-  padding: 1.3em 0 0;
+  margin: 0.55em 0 0;
+  padding: 0.7em 0 0;
   border-top: 1px solid #ececec;
 }
 .services li {
