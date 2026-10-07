@@ -13,7 +13,7 @@ header.nav {
   position: sticky; top: 0; z-index: 30;
   background: rgba(255,255,255,.94);
   display: grid;
-  grid-template-columns: 0.8fr 0.85fr 1.35fr 0.9fr;
+  grid-template-columns: 1fr 1fr 0.8fr 1fr;
   align-items: center;
   gap: 8px;
   padding: 18px 5vw 16px;
@@ -41,13 +41,13 @@ header.nav a:nth-child(4) { text-align: right; }
   min-height: 100vh;
   margin: 0;
   overflow: hidden;
-  background: #fff url("id-lab-city-iso.jpg") center 30% / cover no-repeat;
+  background: #fff;
 }
 .cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 30%;
+  object-position: center 46%;
   display: block;
 }
 body.home footer {
@@ -124,11 +124,12 @@ body.home footer {
   display: block;
 }
 .slideshow-caption {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.35;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
   margin: 8px 0 2.2em;
-  min-height: 2.2em;
+  min-height: 2.6em;
 }
 
 @font-face {
@@ -304,10 +305,79 @@ body.home footer {
   border-top: 1px solid #ececec;
 }
 .services li {
+  position: relative;
   font-size: clamp(17px, 3.5vw, 24px);
   line-height: 1.5;
   letter-spacing: -0.03em;
-  padding: 0.15em 0;
+  padding: 0.22em 0 0.22em 1.15em;
+}
+.services li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 5px;
+  height: 5px;
+  background: #111;
+}
+
+.seq {
+  list-style: none;
+  margin: 1.6em 0 0;
+  padding: 1.3em 0 0;
+  border-top: 1px solid #ececec;
+}
+.seq > li {
+  position: relative;
+  margin: 0 0 1.35em;
+  padding: 0 0 0 1.15em;
+}
+.seq > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  background: #111;
+}
+.seq .n {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.2em;
+}
+.seq h2 {
+  font-size: clamp(17px, 3.5vw, 24px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+.seq p {
+  margin: 0.28em 0 0;
+}
+.seq .sub {
+  list-style: none;
+  margin: 0.45em 0 0;
+  padding: 0;
+}
+.seq .sub li {
+  position: relative;
+  padding: 0.12em 0 0.12em 1.15em;
+  font-size: clamp(17px, 3.5vw, 24px);
+  letter-spacing: -0.03em;
+  line-height: 1.4;
+}
+.seq .sub li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  background: #111;
 }
 
 .contact-page {
@@ -328,6 +398,12 @@ body.home footer {
 .contact-page .mail {
   font-size: clamp(18px, 3.8vw, 26px);
   font-weight: 500;
+}
+.contact-page .mark {
+  width: 76px;
+  height: auto;
+  margin-top: 36px;
+  display: block;
 }
 
 footer {
