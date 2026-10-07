@@ -3,7 +3,7 @@ const imageCaptions = {
   "OMA-LV-OSAKA-ORIG-01.avif": "OMA · Louis Vuitton Visionary Journeys — Origins · Osaka, 2025 · design and coordination lead",
   "OMA-LV-OSAKA-ORIG-02.avif": "OMA · Louis Vuitton Visionary Journeys — Origins · Osaka, 2025 · design and coordination lead",
   "OMA-LV-OSAKA-MONO.avif": "OMA · Louis Vuitton Visionary Journeys — Monogram · Osaka, 2025 · design and coordination lead",
-  "06-B.jpg": "OMA · Louis Vuitton Visionary Journeys — LV & Japan · Osaka, 2025 · design and coordination lead",
+  "06-B.jpg": "OMA · Louis Vuitton Visionary Journeys — Fashion · Shanghai, 2025 · design and coordination lead",
   "19.jpg": "OMA · Louis Vuitton Visionary Journeys — Trunkscape · Osaka, 2025 · design and coordination lead",
   "20.jpg": "OMA · Louis Vuitton Visionary Journeys — LV & Japan · Osaka, 2025 · design and coordination lead",
   "21.jpg": "OMA · Louis Vuitton Visionary Journeys — Atelier · Osaka, 2025 · design and coordination lead",
