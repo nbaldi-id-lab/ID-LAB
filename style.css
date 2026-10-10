@@ -17,7 +17,7 @@ header.nav {
   align-items: baseline;
   width: min(820px, 100%);
   margin-inline: auto;
-  gap: 0.55em;
+  gap: 0.4em;
   padding: 18px 5vw 16px;
 }
 body.home header.nav {
@@ -27,7 +27,7 @@ body.home header.nav {
 }
 header.nav a {
   flex: 0 0 auto;
-  font-size: clamp(11px, 2.6vw, 20px);
+  font-size: clamp(10px, 2.4vw, 18px);
   font-weight: 700;
   letter-spacing: -0.03em;
   text-transform: uppercase;
@@ -84,6 +84,12 @@ body.home footer {
   line-height: 1.38;
   letter-spacing: -0.03em;
   margin-bottom: 1.05em;
+}
+body.identity .wrap p {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.32;
 }
 .wrap .name {
   margin-top: 2em;
