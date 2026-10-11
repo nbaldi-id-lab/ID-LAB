@@ -56,15 +56,15 @@ header.nav a {
   pointer-events: none;
 }
 body.home footer {
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
+  position: relative;
   background: none;
+  margin-top: 2em;
 }
 
 .intro {
   max-width: var(--col);
   margin: 0 auto;
-  padding: 10vh 6vw 14vh;
+  padding: 8vh 6vw 6vh;
   text-align: center;
 }
 .intro p {
@@ -92,7 +92,7 @@ body.home footer {
   margin-bottom: 0.85em;
 }
 .wrap p.tight {
-  margin-bottom: 0.35em;
+  margin-bottom: 0.15em;
 }
 .wrap .name {
   margin-top: 2em;
